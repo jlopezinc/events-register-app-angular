@@ -28,16 +28,15 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatCardModule } from '@angular/material/card';
 import {MatGridListModule} from '@angular/material/grid-list';
 import {MatListModule} from '@angular/material/list';
-import { UserlistDirective } from './userlist.directive';
-import { UserDirective } from './user.directive';
+import { UserCardComponent } from './shared/user-card/user-card.component';
+import { MatSidenavModule } from '@angular/material/sidenav';
 
 Amplify.configure(awsconfig);
 @NgModule({
   declarations: [
     AppComponent,
     QrReaderComponent,
-    UserlistDirective,
-    UserDirective
+    UserCardComponent
   ],
   imports: [
     BrowserModule,
@@ -53,7 +52,8 @@ Amplify.configure(awsconfig);
     MatCardModule,
     MatGridListModule,
     HttpClientModule,
-    MatListModule
+    MatListModule,
+    MatSidenavModule
   ],
   providers: [
     AuthInterceptor,

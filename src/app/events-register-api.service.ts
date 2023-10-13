@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpClient } from '@angular/common/http';
 import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
@@ -21,21 +20,21 @@ export class Metadata {
   phoneNumber: string = "";
   registeredAt: Date | undefined;
   paidAt: Date | undefined;
-  checkIn: CheckIn= new CheckIn();
+  checkIn: CheckIn = new CheckIn();
 
 }
 
 export class Vehicle {
-  plate: string= "";
-  make: string= "";
-  model: string= "";
+  plate: string = "";
+  make: string = "";
+  model: string = "";
 }
 
 export class People {
-  type:string = "";
-  name:string = "";
-  driversLicense:string = "";
-  phoneNumber:string = "";;
+  type: string = "";
+  name: string = "";
+  driversLicense: string = "";
+  phoneNumber: string = "";
 }
 
 export class CheckIn {
@@ -53,12 +52,12 @@ export class EventsRegisterApiService {
 
   api = 'https://3692kus1h1.execute-api.eu-north-1.amazonaws.com';
 
-  getUser(email: string, eventName: string){
+  getUser(email: string, eventName: string) {
     return this.http.get<UserModel>(this.api + '/v1/' + eventName + '/' + email)
       .pipe(catchError(this.handleError));
   }
 
-  checkInUser(email: string, eventName: string){
+  checkInUser(email: string, eventName: string) {
     return this.http.put<UserModel>(this.api + '/v1/' + eventName + '/' + email, null)
       .pipe(catchError(this.handleError));
   }

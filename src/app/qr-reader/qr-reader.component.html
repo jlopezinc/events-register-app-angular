@@ -1,36 +1,32 @@
-<section>
-  <mat-slide-toggle
-          class="example-margin"
-          color="primary"
-          (change)="setLiveMode($event)">
-        Modo CheckIn
+<div class="container">
+  <mat-slide-toggle class="example-margin" color="primary" (change)="setLiveMode($event)">
+    Modo CheckIn
   </mat-slide-toggle>
-  <mat-slide-toggle
-          class="example-margin"
-          color="warn"
-          (change)="onCameraSlideChange($event)"
-          checked="true">
-        Camara
+
+  <mat-slide-toggle class="example-margin" color="warn" (change)="onCameraSlideChange($event)" checked="true">
+    Camara
   </mat-slide-toggle>
+
   <ng-template [ngIf]="currentQrCodeValue.length > 0">
     <div class="right">
       <button mat-raised-button color="accent" (click)="getUserInContext()">Carregar no contexto</button>
     </div>
-</ng-template>
-</section>
+  </ng-template>
+</div>
 <mat-divider></mat-divider>
 
 <div class="col-xs-12 col-md-6 col-lg-4 col-xl-3 my-1">
   <select #select1 (change)="action.playDevice(select1.value)" class="form-select form-select-sm">
     <option [value]="null" selected>Select device</option>
-    <option *ngFor="let c of action.devices.value; let i = index" [value]="c.deviceId" [selected]="i == action.deviceIndexActive">{{c.label}}</option>
+    <option *ngFor="let c of action.devices.value; let i = index" [value]="c.deviceId"
+      [selected]="i == action.deviceIndexActive">{{c.label}}</option>
   </select>
 </div>
 
 <!-- For camera -->
-<ngx-scanner-qrcode #action="scanner"
-  (event)="onEvent($event)">
-</ngx-scanner-qrcode>
+
+<ngx-scanner-qrcode #action="scanner" (event)="onEvent($event)"></ngx-scanner-qrcode>
+
 
 <!-- data  -->
 <mat-divider></mat-divider>
@@ -41,6 +37,17 @@
 
 <mat-divider></mat-divider>
 
+<ng-container *ngIf="liveMode && userNotFound == false && alreadyCheckedIn == false && currentUser.userEmail != ''">
+  <mat-card class="mat-app-background basic-container mat-mdc-card-green">
+    <mat-card-header>
+      <div mat-card-avatar class="example-header-image">
+        <mat-icon class="mat-large">done_outline</mat-icon>
+      </div>
+      <mat-card-title></mat-card-title>
+    </mat-card-header>
+  </mat-card>
+</ng-container>
+
 <ng-container *ngIf="userNotFound">
   <mat-card class="mat-app-background basic-container mat-mdc-card-orange">
     <mat-card-header>
@@ -48,72 +55,36 @@
         <mat-icon class="mat-large" color="warning">dangerous</mat-icon>
       </div>
       <mat-card-title>Não encontrado</mat-card-title>
-     </mat-card-header>
+    </mat-card-header>
 
-      <mat-card-content class="card-content">
-        Email não encontrado/QR code não reconhecido!
-      </mat-card-content>
-      <button mat-button (click)="clearSelectedUser()">LIMPAR</button>
-    </mat-card>
+    <mat-card-content class="card-content">
+      Email não encontrado/QR code não reconhecido!
+    </mat-card-content>
+    <button mat-button (click)="clearSelectedUser()">LIMPAR</button>
+  </mat-card>
 </ng-container>
 
 <ng-container *ngIf="alreadyCheckedIn">
-  <mat-card class="mat-app-background basic-container mat-mdc-card-orange" >
+  <mat-card class="mat-app-background basic-container mat-mdc-card-orange">
     <mat-card-header>
       <div mat-card-avatar class="example-header-image">
         <mat-icon class="mat-large" color="warning">warning</mat-icon>
       </div>
       <mat-card-title>Já foi checked in!</mat-card-title>
-     </mat-card-header>
+    </mat-card-header>
 
-      <mat-card-content class="card-content">
-        Email/utilizador já checked in! Em: {{currentUser.metadata.checkIn.checkInAt | date : "medium"}}
-      </mat-card-content>
-      <button mat-button (click)="clearSelectedUser()">LIMPAR</button>
-    </mat-card>
+    <mat-card-content class="card-content">
+      Email/utilizador já checked in! Em: {{currentUser.metadata.checkIn.checkInAt | date : "medium"}}
+    </mat-card-content>
+    <button mat-button (click)="clearSelectedUser()">LIMPAR</button>
+  </mat-card>
 </ng-container>
 
 <mat-divider></mat-divider>
 <ng-container *ngIf="currentUser.userEmail != ''" class="mat-typography">
-  <mat-card class="mat-app-background basic-container card">
-    <mat-card-header>
-      <div mat-card-avatar class="example-header-image">
-        <mat-icon class="mat-large">{{currentUser.vehicleType == 'car' ? 'directions_car' : 'two_wheeler'}}</mat-icon>
-      </div>
-      <mat-card-title>{{currentUser.metadata.vehicle.plate}}</mat-card-title>
-      <mat-card-subtitle>{{currentUser.metadata.vehicle.make}} - {{currentUser.metadata.vehicle.model}}</mat-card-subtitle>
-    </mat-card-header>
-    <!--<img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu">-->
-    <mat-card-content class="card-content">
-
-      <mat-list>
-        <mat-list-item>
-          <span matListItemTitle>Checked in</span>
-          <span matListItemLine>{{currentUser.metadata.checkIn.byWho != null ? 'SIM' : 'NÃO'}}</span>
-          <span matListItemLine *ngIf="currentUser.metadata.checkIn.byWho != null">Data/hora:{{currentUser.metadata.checkIn.checkInAt| date : "medium"}}</span>
-        </mat-list-item>
-        <mat-list-item>
-          <span matListItemTitle>Pago</span>
-          <span matListItemLine class="{{currentUser.paid ? 'green': 'warn'}}">{{currentUser.paid ? 'SIM': 'NÃO'}}</span>
-        </mat-list-item>
-      </mat-list>
-      <mat-divider></mat-divider>
-      <mat-list>
-        <div mat-subheader>Ocupantes - {{currentUser.metadata.people.length}}</div>
-        <mat-list-item *ngFor="let person of currentUser.metadata.people">
-          <mat-icon matListItemIcon>{{person.type == 'driver' ? 'sports_motorsports' : 'hail'}}</mat-icon>
-          <div matListItemTitle>{{person.name}}</div>
-          <div matListItemLine>{{person.phoneNumber}}</div>
-          <div matListItemLine *ngIf="person.driversLicense != null">Carta Condução: {{person.driversLicense}}</div>
-        </mat-list-item>
-      </mat-list>
-      <mat-divider></mat-divider>
-    </mat-card-content>
-    <mat-card-actions>
-      <button mat-button *ngIf="currentUser.metadata.checkIn.byWho == null" (click)="manualCheckInUser()">CHECK IN</button>
-      <button mat-button (click)="clearSelectedUser()">LIMPAR</button>
-    </mat-card-actions>
-  </mat-card>
+  <app-user-card [user]="currentUser" (clearSelectedUserEvent)="clearSelectedUser()"
+    (manualCheckInSelectedUserEvent)="manualCheckInUser()">
+  </app-user-card>
 </ng-container>
 
 <mat-divider></mat-divider>

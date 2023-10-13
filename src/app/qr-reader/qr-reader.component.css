@@ -1,7 +1,11 @@
 .mat-mdc-card-orange {
   background-color: orangered;
 }
+.mat-mdc-card-green {
+  background-color: greenyellow;
+}
 
 .ngx-scanner-qrcode {
   width: 50%;
 }
+
