@@ -1,0 +1,40 @@
+<mat-card class="mat-app-background basic-container card">
+  <mat-card-header>
+    <div mat-card-avatar class="example-header-image">
+      <mat-icon class="mat-large">{{user.vehicleType == 'car' ? 'directions_car' : 'two_wheeler'}}</mat-icon>
+    </div>
+    <mat-card-title>{{user.metadata.vehicle.plate}}</mat-card-title>
+    <mat-card-subtitle>{{user.metadata.vehicle.make}} - {{user.metadata.vehicle.model}}</mat-card-subtitle>
+  </mat-card-header>
+  <!--<img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu">-->
+  <mat-card-content class="card-content">
+
+    <mat-list>
+      <mat-list-item>
+        <span matListItemTitle>Checked in</span>
+        <span matListItemLine>{{user.metadata.checkIn.byWho != null ? 'SIM' : 'NÃO'}}</span>
+        <span matListItemLine *ngIf="user.metadata.checkIn.byWho != null">Data/hora:{{user.metadata.checkIn.checkInAt|
+          date : "medium"}}</span>
+      </mat-list-item>
+      <mat-list-item>
+        <span matListItemTitle>Pago</span>
+        <span matListItemLine class="{{user.paid ? 'green': 'warn'}}">{{user.paid ? 'SIM': 'NÃO'}}</span>
+      </mat-list-item>
+    </mat-list>
+    <mat-divider></mat-divider>
+    <mat-list>
+      <div mat-subheader>Ocupantes - {{user.metadata.people.length}}</div>
+      <mat-list-item *ngFor="let person of user.metadata.people">
+        <mat-icon matListItemIcon>{{person.type == 'driver' ? 'sports_motorsports' : 'hail'}}</mat-icon>
+        <div matListItemTitle>{{person.name}}</div>
+        <div matListItemLine>{{person.phoneNumber}}</div>
+        <div matListItemLine *ngIf="person.driversLicense != null">Carta Condução: {{person.driversLicense}}</div>
+      </mat-list-item>
+    </mat-list>
+    <mat-divider></mat-divider>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-button *ngIf="user.metadata.checkIn.byWho == null" (click)="manualCheckInUser()">CHECK IN</button>
+    <button mat-button (click)="clearSelectedUser()">LIMPAR</button>
+  </mat-card-actions>
+</mat-card>

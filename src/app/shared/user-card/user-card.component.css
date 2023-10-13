@@ -1,0 +1,7 @@
+.checkin-ok {
+  background: chartreuse;
+}
+
+.checkin-problem {
+  background: red;
+}

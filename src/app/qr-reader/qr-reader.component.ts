@@ -9,12 +9,14 @@ import {
 } from 'ngx-scanner-qrcode';
 import { ViewChild } from '@angular/core';
 import { UserModel } from '../events-register-api.service';
+import { UserCardComponent } from '../shared/user-card/user-card.component';
+
 
 @Component({
   selector: 'app-qr-reader',
   templateUrl: './qr-reader.component.html',
   styleUrls: ['./qr-reader.component.css'],
-  providers: [ EventsRegisterApiService ],
+  providers: [EventsRegisterApiService, UserCardComponent]
 })
 export class QrReaderComponent {
 
@@ -43,10 +45,10 @@ export class QrReaderComponent {
   public onEvent(e: ScannerQRCodeResult[], action?: any): void {
 
     let value = e[0].value;
-    if (this.currentQrCodeValue !== value){
+    if (this.currentQrCodeValue !== value) {
       this.currentQrCodeValue = value;
       console.log(e);
-      if (this.liveMode){
+      if (this.liveMode) {
         this.checkInUser(this.currentQrCodeValue);
       } else {
         this.getUserFromApi(this.currentQrCodeValue);
@@ -54,22 +56,22 @@ export class QrReaderComponent {
     }
   }
 
-  public setLiveMode(e: any){
+  public setLiveMode(e: any) {
     this.liveMode = e.checked;
   }
-  public onCameraSlideChange(e: any){
+  public onCameraSlideChange(e: any) {
     this.action.isStart ? this.action.stop() : this.action.start()
   }
 
-  public getUserInContext(){
+  public getUserInContext() {
     this.getUserFromApi(this.currentQrCodeValue);
   }
 
-  public manualCheckInUser(){
-    this.checkInUser(this.currentUser.userEmail );
+  public manualCheckInUser() {
+    this.checkInUser(this.currentUser.userEmail);
   }
 
-  public clearSelectedUser(){
+  public clearSelectedUser() {
     this.currentQrCodeValue = "";
     this.currentUser = new UserModel();
     this.userNotFound = false;
@@ -92,52 +94,52 @@ export class QrReaderComponent {
 
 
 
-  private getUserFromApi(email: string){
-    this.eventsRegisterApiService.getUser(email, 'ttamigosnatal2023')
-        .subscribe({
-          next: (data) => {
-            this.currentUser = { ...data}
-            this.userNotFound = false;
-            this.alreadyCheckedIn = false;
-          },
-          error: () =>{
-            this.currentUser = new UserModel();
-            this.userNotFound = true;
-            this.alreadyCheckedIn = false;
-          }
-
-        })
-  }
-
-
-  private checkInUser(email: string){
+  private getUserFromApi(email: string) {
     this.eventsRegisterApiService.getUser(email, 'ttamigosnatal2023')
       .subscribe({
         next: (data) => {
-          if (data.metadata.checkIn.byWho != null){
-            this.currentUser = { ...data};
+          this.currentUser = { ...data }
+          this.userNotFound = false;
+          this.alreadyCheckedIn = false;
+        },
+        error: () => {
+          this.currentUser = new UserModel();
+          this.userNotFound = true;
+          this.alreadyCheckedIn = false;
+        }
+
+      })
+  }
+
+
+  private checkInUser(email: string) {
+    this.eventsRegisterApiService.getUser(email, 'ttamigosnatal2023')
+      .subscribe({
+        next: (data) => {
+          if (data.metadata.checkIn.byWho != null) {
+            this.currentUser = { ...data };
             // already checked in
             this.alreadyCheckedIn = true;
           } else {
-            this.eventsRegisterApiService.checkInUser (email, 'ttamigosnatal2023')
-                .subscribe({
-                  next: (data) => {
-                    this.currentUser = { ...data}
-                    this.userNotFound = false;
-                    this.alreadyCheckedIn = false;
-                  },
-                  error: () =>{
-                    this.currentUser = new UserModel()
-                    this.userNotFound = true;
-                    this.alreadyCheckedIn = false;
-                  }
-                })
+            this.eventsRegisterApiService.checkInUser(email, 'ttamigosnatal2023')
+              .subscribe({
+                next: (data) => {
+                  this.currentUser = { ...data }
+                  this.userNotFound = false;
+                  this.alreadyCheckedIn = false;
+                },
+                error: () => {
+                  this.currentUser = new UserModel()
+                  this.userNotFound = true;
+                  this.alreadyCheckedIn = false;
+                }
+              })
           }
         },
         error: () => {
-            this.currentUser = new UserModel()
-            this.userNotFound = true;
-            this.alreadyCheckedIn = false;
+          this.currentUser = new UserModel()
+          this.userNotFound = true;
+          this.alreadyCheckedIn = false;
         }
       })
 
