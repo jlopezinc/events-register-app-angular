@@ -1,28 +1,28 @@
-<!--<amplify-authenticator [hideSignUp]="true">
-  <ng-template amplifySlot="authenticated" let-user="user" let-signOut="signOut">-->
-<mat-sidenav-container class="sidenav-container">
-  <mat-sidenav #drawer class="sidenav" fixedInViewport [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
-    [mode]="(isHandset$ | async) ? 'over' : 'side'" [opened]="(isHandset$ | async) === false">
-    <mat-toolbar>Menu</mat-toolbar>
-    <mat-nav-list>
-      <a mat-list-item routerLink="/camera">QR Reader</a>
-      <a mat-list-item routerLink="/reports">Relatórios</a>
-    </mat-nav-list>
-  </mat-sidenav>
-  <mat-sidenav-content>
-    <mat-toolbar color="primary">
-      <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()"
-        *ngIf="isHandset$ | async">
-        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
-      </button>
-      <span>TT Amigos Natal 2023</span>
-      <span class="example-spacer"></span>
-      <!--<button mat-icon-button (click)="signOut()">
-        <mat-icon>logout</mat-icon>
-      </button>-->
-    </mat-toolbar>
-    <router-outlet></router-outlet>
-  </mat-sidenav-content>
-</mat-sidenav-container>
-<!--  </ng-template>
-</amplify-authenticator>-->
+<amplify-authenticator [hideSignUp]="true">
+  <ng-template amplifySlot="authenticated" let-user="user" let-signOut="signOut">
+    <mat-sidenav-container class="sidenav-container">
+      <mat-sidenav #drawer class="sidenav" fixedInViewport [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+        [mode]="(isHandset$ | async) ? 'over' : 'side'" [opened]="(isHandset$ | async) === false">
+        <mat-toolbar>Menu</mat-toolbar>
+        <mat-nav-list>
+          <a mat-list-item routerLink="/camera">QR Reader</a>
+          <a mat-list-item routerLink="/reports">Relatórios</a>
+        </mat-nav-list>
+      </mat-sidenav>
+      <mat-sidenav-content>
+        <mat-toolbar color="primary">
+          <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()"
+            *ngIf="isHandset$ | async">
+            <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+          </button>
+          <span>TT Amigos Natal 2023</span>
+          <span class="example-spacer"></span>
+          <button mat-icon-button (click)="signOut()">
+            <mat-icon>logout</mat-icon>
+          </button>
+        </mat-toolbar>
+        <router-outlet></router-outlet>
+      </mat-sidenav-content>
+    </mat-sidenav-container>
+  </ng-template>
+</amplify-authenticator>
