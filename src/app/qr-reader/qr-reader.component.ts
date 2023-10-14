@@ -99,12 +99,19 @@ export class QrReaderComponent {
 
 
   private getUserFromApi(email: string) {
+    this.currentUser = new UserModel();
     this.eventsRegisterApiService.getUser(email, 'ttamigosnatal2023')
       .subscribe({
         next: (data) => {
-          this.currentUser = { ...data }
-          this.userNotFound = false;
-          this.alreadyCheckedIn = false;
+          if (data != null) {
+            this.currentUser = { ...data }
+            this.userNotFound = false;
+            this.alreadyCheckedIn = false;
+          } else {
+            this.currentUser = new UserModel();
+            this.userNotFound = true;
+            this.alreadyCheckedIn = false;
+          }
         },
         error: () => {
           this.currentUser = new UserModel();
