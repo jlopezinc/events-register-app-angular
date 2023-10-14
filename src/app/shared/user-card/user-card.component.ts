@@ -20,7 +20,7 @@ export class UserCardComponent {
   }
 
   public manualCheckInUser() {
-    this.manualCheckInSelectedUserEvent.emit();
+    this.manualCheckInSelectedUserEvent.emit(); 
   }
 
 }

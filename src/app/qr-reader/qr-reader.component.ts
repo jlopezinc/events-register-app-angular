@@ -42,6 +42,10 @@ export class QrReaderComponent {
     });
   }
 
+  ngOnDestroy() {
+    this.action.stop();
+  }
+
   public onEvent(e: ScannerQRCodeResult[], action?: any): void {
 
     let value = e[0].value;

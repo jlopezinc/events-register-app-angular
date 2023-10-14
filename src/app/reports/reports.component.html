@@ -1,1 +1,17 @@
-<p>reports works!</p>
+<mat-card class="example-card">
+  <mat-card-content>
+    <h3 class="example-h3">Progresso - {{checkedInPercentage}}%</h3>
+
+    <section class="example-section">
+      <mat-progress-bar class="example-margin" color="accent" [value]="checkedInPercentage"></mat-progress-bar>
+    </section>
+    <mat-divider></mat-divider>
+    <section class="example-section">
+      <mat-list>
+        <mat-list-item>Total carros checked in: {{counters.checkedInCar}}</mat-list-item>
+        <mat-list-item>Total motas checked in: {{counters.checkedInMotorcycle}}</mat-list-item>
+        <mat-list-item>Total inscritos: {{counters.total}}</mat-list-item>
+      </mat-list>
+    </section>
+  </mat-card-content>
+</mat-card>

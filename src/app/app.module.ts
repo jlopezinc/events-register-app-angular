@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
-import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 import { Amplify } from 'aws-amplify';
@@ -23,15 +22,27 @@ import { MatCardModule } from '@angular/material/card';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatListModule } from '@angular/material/list';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatProgressBarModule } from '@angular/material/progress-bar'
+
+import { RouterModule } from '@angular/router';
+import { QrReaderComponent } from './qr-reader/qr-reader.component';
+import { ReportsComponent } from './reports/reports.component'
+import { UserCardComponent } from './shared/user-card/user-card.component';
+import { NgxScannerQrcodeModule, LOAD_WASM } from 'ngx-scanner-qrcode';
+
+// Necessary to solve the problem of losing internet connection
+LOAD_WASM().subscribe()
 
 Amplify.configure(awsconfig);
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    QrReaderComponent,
+    UserCardComponent,
+    ReportsComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule,
     AmplifyAuthenticatorModule,
     BrowserAnimationsModule,
     MatIconModule,
@@ -43,7 +54,16 @@ Amplify.configure(awsconfig);
     MatGridListModule,
     HttpClientModule,
     MatListModule,
-    MatSidenavModule
+    MatSidenavModule,
+    MatProgressBarModule,
+    NgxScannerQrcodeModule,
+    RouterModule.forRoot(
+      [
+        { path: 'camera', component: QrReaderComponent },
+        { path: 'reports', component: ReportsComponent },
+        { path: '', redirectTo: '/camera', pathMatch: 'full' }
+      ],
+      { enableTracing: false })
   ],
   providers: [
     AuthInterceptor,

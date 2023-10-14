@@ -42,6 +42,12 @@ export class CheckIn {
   byWho: string = "";
 }
 
+export class Counters {
+  total: number = 0;
+  checkedInCar: number = 0;
+  checkedInMotorcycle: number = 0;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -54,6 +60,11 @@ export class EventsRegisterApiService {
 
   getUser(email: string, eventName: string) {
     return this.http.get<UserModel>(this.api + '/v1/' + eventName + '/' + email)
+      .pipe(catchError(this.handleError));
+  }
+
+  getCounters(eventName: string) {
+    return this.http.get<Counters>(this.api + '/v1/' + eventName + '/counters')
       .pipe(catchError(this.handleError));
   }
 
