@@ -75,6 +75,10 @@ export class QrReaderComponent {
     this.checkInUser(this.currentUser.userEmail);
   }
 
+  public cancelCheckInUser() {
+    this.cancelCheckIn(this.currentUser.userEmail);
+  }
+
   public clearSelectedUser() {
     this.currentQrCodeValue = "";
     this.currentUser = new UserModel();
@@ -127,7 +131,7 @@ export class QrReaderComponent {
     this.eventsRegisterApiService.getUser(email, 'ttamigosnatal2023')
       .subscribe({
         next: (data) => {
-          if (data.metadata.checkIn.byWho != null) {
+          if (data.checkedIn) {
             this.currentUser = { ...data };
             // already checked in
             this.alreadyCheckedIn = true;
@@ -155,5 +159,21 @@ export class QrReaderComponent {
       })
 
 
+  }
+
+  public cancelCheckIn(email: string) {
+    this.eventsRegisterApiService.cancelCheckInUser(email, 'ttamigosnatal2023')
+      .subscribe({
+        next: () => {
+          this.currentUser = new UserModel();
+          this.userNotFound = false;
+          this.alreadyCheckedIn = false;
+        },
+        error: () => {
+          this.currentUser = new UserModel();
+          this.userNotFound = true;
+          this.alreadyCheckedIn = false;
+        }
+      })
   }
 }

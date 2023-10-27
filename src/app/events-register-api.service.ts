@@ -8,6 +8,7 @@ export class UserModel {
   eventName: string = "";
   userEmail: string = "";
   paid: boolean = false;
+  checkedIn: boolean = false;
   vehicleType: string = "";
   metadata: Metadata = new Metadata();
 }
@@ -21,7 +22,7 @@ export class Metadata {
   registeredAt: Date | undefined;
   paidAt: Date | undefined;
   checkIn: CheckIn = new CheckIn();
-
+  paymentInfo: PaymentInfo = new PaymentInfo();
 }
 
 export class Vehicle {
@@ -30,11 +31,19 @@ export class Vehicle {
   model: string = "";
 }
 
+export class PaymentInfo {
+  amount: number = 0;
+  byWho: string = "";
+  confirmedAt: Date | undefined;
+  paymentFile: string = "";
+}
+
 export class People {
   type: string = "";
   name: string = "";
   driversLicense: string = "";
   phoneNumber: string = "";
+  cc: string = "";
 }
 
 export class CheckIn {
@@ -44,8 +53,10 @@ export class CheckIn {
 
 export class Counters {
   total: number = 0;
+  paid: number = 0;
   checkedInCar: number = 0;
   checkedInMotorcycle: number = 0;
+  checkedInQuad: number = 0;
 }
 
 @Injectable({
@@ -69,7 +80,14 @@ export class EventsRegisterApiService {
   }
 
   checkInUser(email: string, eventName: string) {
+    // todo, send byWho
     return this.http.put<UserModel>(this.api + '/v1/' + eventName + '/' + email, null)
+      .pipe(catchError(this.handleError));
+  }
+
+  cancelCheckInUser(email: string, eventName: string) {
+    // todo, send byWho
+    return this.http.delete<UserModel>(this.api + '/v1/' + eventName + '/' + email)
       .pipe(catchError(this.handleError));
   }
 

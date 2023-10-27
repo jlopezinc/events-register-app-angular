@@ -83,7 +83,7 @@
 <mat-divider></mat-divider>
 <ng-container *ngIf="currentUser.userEmail != ''" class="mat-typography">
   <app-user-card [user]="currentUser" (clearSelectedUserEvent)="clearSelectedUser()"
-    (manualCheckInSelectedUserEvent)="manualCheckInUser()">
+    (manualCheckInSelectedUserEvent)="manualCheckInUser()" (cancelCheckInSelectedUserEvent)="cancelCheckInUser()">
   </app-user-card>
 </ng-container>
 
