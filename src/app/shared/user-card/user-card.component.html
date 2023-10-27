@@ -13,7 +13,7 @@
     <mat-list>
       <mat-list-item>
         <span matListItemTitle>Checked in</span>
-        <span matListItemLine>{{user.checkedIn != null ? 'SIM' : 'NÃO'}}</span>
+        <span matListItemLine>{{user.checkedIn ? 'SIM' : 'NÃO'}}</span>
         <span matListItemLine *ngIf="user.metadata.checkIn.byWho != null">Data/hora:{{user.metadata.checkIn.checkInAt|
           date : "medium"}}</span>
       </mat-list-item>

@@ -135,6 +135,8 @@ export class QrReaderComponent {
             this.currentUser = { ...data };
             // already checked in
             this.alreadyCheckedIn = true;
+          } else if (!data.paid) {
+            this.currentUser = { ...data };
           } else {
             this.eventsRegisterApiService.checkInUser(email, 'ttamigosnatal2023')
               .subscribe({

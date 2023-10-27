@@ -37,7 +37,8 @@
 
 <mat-divider></mat-divider>
 
-<ng-container *ngIf="liveMode && userNotFound == false && alreadyCheckedIn == false && currentUser.userEmail != ''">
+<ng-container *ngIf="liveMode && userNotFound == false && alreadyCheckedIn == false
+              && currentUser.userEmail != '' && currentUser.paid">
   <mat-card class="mat-app-background basic-container mat-mdc-card-green">
     <mat-card-header>
       <div mat-card-avatar class="example-header-image">
@@ -59,6 +60,22 @@
 
     <mat-card-content class="card-content">
       Email não encontrado/QR code não reconhecido!
+    </mat-card-content>
+    <button mat-button (click)="clearSelectedUser()">LIMPAR</button>
+  </mat-card>
+</ng-container>
+
+<ng-container *ngIf="liveMode && userNotFound == false && currentUser.userEmail != '' && !currentUser.paid">
+  <mat-card class="mat-app-background basic-container mat-mdc-card-orange">
+    <mat-card-header>
+      <div mat-card-avatar class="example-header-image">
+        <mat-icon class="mat-large" color="warning">dangerous</mat-icon>
+      </div>
+      <mat-card-title>Não Pago!</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content class="card-content">
+      Inscrição não está paga!
     </mat-card-content>
     <button mat-button (click)="clearSelectedUser()">LIMPAR</button>
   </mat-card>
