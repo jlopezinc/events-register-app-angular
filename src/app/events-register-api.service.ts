@@ -53,7 +53,14 @@ export class CheckIn {
 
 export class Counters {
   total: number = 0;
+  totalCar: number = 0;
+  totalMotorcycle: number = 0;
+  totalQuad: number = 0;
   paid: number = 0;
+  paidCar: number = 0;
+  paidMotorcycle: number = 0;
+  paidQuad: number = 0;
+  checkedIn: number = 0;
   checkedInCar: number = 0;
   checkedInMotorcycle: number = 0;
   checkedInQuad: number = 0;
