@@ -56,6 +56,7 @@ export class Counters {
   totalCar: number = 0;
   totalMotorcycle: number = 0;
   totalQuad: number = 0;
+  totalParticipants: number = 0;
   paid: number = 0;
   paidCar: number = 0;
   paidMotorcycle: number = 0;

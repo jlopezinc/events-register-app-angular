@@ -1,6 +1,6 @@
 <mat-card class="example-card">
   <mat-card-content>
-    <h3 class="example-h3">Progresso check in - {{checkedInPercentage}}%</h3>
+    <h3 class="example-h3">Progresso check in - {{checkedInPercentage | number}}%</h3>
 
     <section class="example-section">
       <mat-progress-bar class="example-margin" color="accent" [value]="checkedInPercentage"></mat-progress-bar>
@@ -8,14 +8,40 @@
     <mat-divider></mat-divider>
     <section class="example-section">
       <mat-list>
-        <mat-list-item>Total carros checked in: {{counters.checkedInCar}} - {{checkedInCarPercentage}}%</mat-list-item>
-        <mat-list-item>Total motas checked in: {{counters.checkedInMotorcycle}} - {{checkedInMotorcyclePercentage}}%
+        <mat-list-item>Total carros checked in: {{counters.checkedInCar}} -
+          {{checkedInCarPercentage | number}}%</mat-list-item>
+        <mat-list-item>Total motas checked in: {{counters.checkedInMotorcycle}} -
+          {{checkedInMotorcyclePercentage | number}}%
         </mat-list-item>
-        <mat-list-item>Total quads checked in: {{counters.checkedInQuad}} - {{checkedInQuadPercentage}}%</mat-list-item>
+        <mat-list-item>Total quads checked in: {{counters.checkedInQuad}} -
+          {{checkedInQuadPercentage | number}}%</mat-list-item>
         <mat-list-item>Total inscritos: {{counters.total}}</mat-list-item>
-        <mat-list-item>Total pagos: {{counters.paid}}</mat-list-item>
+      </mat-list>
+    </section>
 
+    <mat-divider></mat-divider>
+    <h3 class="example-h3">Progresso pagamento - {{paidPercentage | number}}%</h3>
+    <section class="example-section">
+      <mat-progress-bar class="example-margin" color="accent" [value]="paidPercentage"></mat-progress-bar>
+    </section>
+    <section class="example-section">
+      <mat-list>
+        <mat-list-item>Total carros pagos: {{counters.paidCar}} - {{paidCarPercentage | number}}%</mat-list-item>
+        <mat-list-item>Total motas pagos: {{counters.paidMotorcycle}} - {{paidMotorcyclePercentage | number}}%
+        </mat-list-item>
+        <mat-list-item>Total quads pagos: {{counters.paidQuad}} - {{paidQuadPercentage| number}}%</mat-list-item>
+      </mat-list>
+    </section>
 
+    <mat-divider></mat-divider>
+    <h3 class="example-h3">Total viaturas - {{counters.total}}</h3>
+    <h3 class="example-h3">Total participantes - {{counters.totalParticipants}}</h3>
+    <section class="example-section">
+      <mat-list>
+        <mat-list-item>Total carros: {{counters.totalCar}}</mat-list-item>
+        <mat-list-item>Total motas: {{counters.totalMotorcycle}}
+        </mat-list-item>
+        <mat-list-item>Total quads: {{counters.totalQuad}}</mat-list-item>
       </mat-list>
     </section>
   </mat-card-content>
