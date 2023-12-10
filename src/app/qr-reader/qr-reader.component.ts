@@ -35,6 +35,7 @@ export class QrReaderComponent {
   currentUser: UserModel = new UserModel();
   userNotFound = false;
   alreadyCheckedIn = false;
+  userHasComment = false;
 
   ngAfterViewInit(): void {
     this.action.isReady.subscribe((res: any) => {
@@ -53,7 +54,7 @@ export class QrReaderComponent {
       this.currentQrCodeValue = value;
       console.log(e);
       if (this.liveMode) {
-        this.checkInUser(this.currentQrCodeValue);
+        this.checkInUser(this.currentQrCodeValue, false);
       } else {
         this.getUserFromApi(this.currentQrCodeValue);
       }
@@ -72,7 +73,8 @@ export class QrReaderComponent {
   }
 
   public manualCheckInUser() {
-    this.checkInUser(this.currentUser.userEmail);
+    // if manual check in, we assume the "comment" was already verified.
+    this.checkInUser(this.currentUser.userEmail, true);
   }
 
   public cancelCheckInUser() {
@@ -84,6 +86,7 @@ export class QrReaderComponent {
     this.currentUser = new UserModel();
     this.userNotFound = false;
     this.alreadyCheckedIn = false;
+    this.userHasComment = false;
   }
 
   private handle(action: any, fn: string): void {
@@ -111,23 +114,26 @@ export class QrReaderComponent {
             this.currentUser = { ...data }
             this.userNotFound = false;
             this.alreadyCheckedIn = false;
+            this.userHasComment = data.metadata.comment != undefined;
           } else {
             this.currentUser = new UserModel();
             this.userNotFound = true;
             this.alreadyCheckedIn = false;
+            this.userHasComment = false;
           }
         },
         error: () => {
           this.currentUser = new UserModel();
           this.userNotFound = true;
           this.alreadyCheckedIn = false;
+          this.userHasComment = false;
         }
 
       })
   }
 
 
-  private checkInUser(email: string) {
+  private checkInUser(email: string, overrideComment: boolean) {
     this.eventsRegisterApiService.getUser(email, 'ttamigosnatal2023')
       .subscribe({
         next: (data) => {
@@ -135,8 +141,9 @@ export class QrReaderComponent {
             this.currentUser = { ...data };
             // already checked in
             this.alreadyCheckedIn = true;
-          } else if (!data.paid) {
+          } else if (!data.paid || (data.metadata.comment != undefined && !overrideComment)) {
             this.currentUser = { ...data };
+            this.userHasComment = data.metadata.comment != undefined;
           } else {
             this.eventsRegisterApiService.checkInUser(email, 'ttamigosnatal2023')
               .subscribe({
@@ -144,11 +151,13 @@ export class QrReaderComponent {
                   this.currentUser = { ...data }
                   this.userNotFound = false;
                   this.alreadyCheckedIn = false;
+                  this.userHasComment = false;
                 },
                 error: () => {
                   this.currentUser = new UserModel()
                   this.userNotFound = true;
                   this.alreadyCheckedIn = false;
+                  this.userHasComment = false;
                 }
               })
           }
@@ -157,6 +166,7 @@ export class QrReaderComponent {
           this.currentUser = new UserModel()
           this.userNotFound = true;
           this.alreadyCheckedIn = false;
+          this.userHasComment = false;
         }
       })
 
@@ -170,11 +180,13 @@ export class QrReaderComponent {
           this.currentUser = new UserModel();
           this.userNotFound = false;
           this.alreadyCheckedIn = false;
+          this.userHasComment = false;
         },
         error: () => {
           this.currentUser = new UserModel();
           this.userNotFound = true;
           this.alreadyCheckedIn = false;
+          this.userHasComment = false;
         }
       })
   }

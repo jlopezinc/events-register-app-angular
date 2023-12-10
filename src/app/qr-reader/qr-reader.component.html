@@ -38,7 +38,7 @@
 <mat-divider></mat-divider>
 
 <ng-container *ngIf="liveMode && userNotFound == false && alreadyCheckedIn == false
-              && currentUser.userEmail != '' && currentUser.paid">
+              && currentUser.userEmail != '' && currentUser.paid && !userHasComment">
   <mat-card class="mat-app-background basic-container mat-mdc-card-green">
     <mat-card-header>
       <div mat-card-avatar class="example-header-image">
@@ -94,6 +94,26 @@
       Email/utilizador já checked in! Em: {{currentUser.metadata.checkIn.checkInAt | date : "medium"}}
     </mat-card-content>
     <button mat-button (click)="clearSelectedUser()">LIMPAR</button>
+  </mat-card>
+</ng-container>
+
+<ng-container *ngIf="userHasComment">
+  <mat-card
+    class="mat-app-background basic-container {{currentUser.checkedIn ? 'mat-mdc-card-yellow' : 'mat-mdc-card-orange'}}">
+    <mat-card-header>
+      <div mat-card-avatar class="example-header-image">
+        <mat-icon class="mat-large" color="warning">warning</mat-icon>
+      </div>
+      <mat-card-title>{{currentUser.checkedIn ? 'Comentário' : 'Verificar Comentário'}}</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content class="card-content">
+      {{currentUser.metadata.comment}}
+    </mat-card-content>
+    <button mat-button (click)="clearSelectedUser()">LIMPAR</button>
+    <button mat-button *ngIf="!currentUser.checkedIn && currentUser.paid" (click)="manualCheckInUser()">FAZER CHECK IN
+      (JÁ
+      VERIFICADO)</button>
   </mat-card>
 </ng-container>
 

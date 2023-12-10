@@ -23,6 +23,7 @@ export class Metadata {
   paidAt: Date | undefined;
   checkIn: CheckIn = new CheckIn();
   paymentInfo: PaymentInfo = new PaymentInfo();
+  comment: string | undefined;
 }
 
 export class Vehicle {
