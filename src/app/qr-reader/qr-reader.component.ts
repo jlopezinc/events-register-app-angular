@@ -137,7 +137,13 @@ export class QrReaderComponent {
     this.eventsRegisterApiService.getUser(email, 'ttamigosnatal2023')
       .subscribe({
         next: (data) => {
-          if (data.checkedIn) {
+          if (data == null) {
+            this.currentUser = new UserModel();
+            this.userNotFound = true;
+            this.alreadyCheckedIn = false;
+            this.userHasComment = false;
+          }
+          else if (data.checkedIn) {
             this.currentUser = { ...data };
             // already checked in
             this.alreadyCheckedIn = true;
