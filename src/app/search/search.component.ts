@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { EventsRegisterApiService, UserModel } from '../events-register-api.service';
 
-const EVENT_NAME = 'ttamigosnatal2025';
+const EVENT_NAME = 'ttamigosnatal2026';
 
 @Component({
     selector: 'app-search',

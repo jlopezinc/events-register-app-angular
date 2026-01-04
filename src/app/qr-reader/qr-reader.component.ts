@@ -105,7 +105,7 @@ export class QrReaderComponent {
 
   private getUserFromApi(email: string) {
     this.currentUser = new UserModel();
-    this.eventsRegisterApiService.getUser(email, 'ttamigosnatal2025')
+    this.eventsRegisterApiService.getUser(email, 'ttamigosnatal2026')
       .subscribe({
         next: (data) => {
           if (data != null) {
@@ -132,7 +132,7 @@ export class QrReaderComponent {
 
 
   private checkInUser(email: string, overrideComment: boolean) {
-    this.eventsRegisterApiService.getUser(email, 'ttamigosnatal2025')
+    this.eventsRegisterApiService.getUser(email, 'ttamigosnatal2026')
       .subscribe({
         next: (data) => {
           if (data == null) {
@@ -149,7 +149,7 @@ export class QrReaderComponent {
             this.currentUser = { ...data };
             this.userHasComment = data.metadata.comment != undefined;
           } else {
-            this.eventsRegisterApiService.checkInUser(email, 'ttamigosnatal2025')
+            this.eventsRegisterApiService.checkInUser(email, 'ttamigosnatal2026')
               .subscribe({
                 next: (data) => {
                   this.currentUser = { ...data }
@@ -178,7 +178,7 @@ export class QrReaderComponent {
   }
 
   public cancelCheckIn(email: string) {
-    this.eventsRegisterApiService.cancelCheckInUser(email, 'ttamigosnatal2025')
+    this.eventsRegisterApiService.cancelCheckInUser(email, 'ttamigosnatal2026')
       .subscribe({
         next: () => {
           this.currentUser = new UserModel();

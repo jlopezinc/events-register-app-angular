@@ -25,7 +25,7 @@ export class ReportsComponent {
   paidQuadPercentage: number = 0;
 
   ngAfterViewInit(): void {
-    this.eventsRegisterApiService.getCounters('ttamigosnatal2025')
+    this.eventsRegisterApiService.getCounters('ttamigosnatal2026')
       .subscribe({
         next: (data) => {
           this.counters = { ...data };

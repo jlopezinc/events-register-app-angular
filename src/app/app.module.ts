@@ -59,7 +59,6 @@ Amplify.configure(awsconfig);
         MatInputModule,
         MatFormFieldModule,
         FormsModule,
-        NgxScannerQrcodeModule,
         RouterModule.forRoot([
             { path: 'camera', component: QrReaderComponent },
             { path: 'reports', component: ReportsComponent },
