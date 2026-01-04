@@ -22,11 +22,15 @@ import { MatCardModule } from '@angular/material/card';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatListModule } from '@angular/material/list';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatProgressBarModule } from '@angular/material/progress-bar'
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { FormsModule } from '@angular/forms';
 
 import { RouterModule } from '@angular/router';
 import { QrReaderComponent } from './qr-reader/qr-reader.component';
-import { ReportsComponent } from './reports/reports.component'
+import { ReportsComponent } from './reports/reports.component';
+import { SearchComponent } from './search/search.component';
 import { UserCardComponent } from './shared/user-card/user-card.component';
 import { ZXingScannerModule } from '@zxing/ngx-scanner';
 
@@ -35,7 +39,8 @@ Amplify.configure(awsconfig);
         AppComponent,
         QrReaderComponent,
         UserCardComponent,
-        ReportsComponent
+        ReportsComponent,
+        SearchComponent
     ],
     bootstrap: [AppComponent], imports: [BrowserModule,
         AmplifyAuthenticatorModule,
@@ -51,9 +56,13 @@ Amplify.configure(awsconfig);
         MatSidenavModule,
         MatProgressBarModule,
         ZXingScannerModule,
+        MatInputModule,
+        MatFormFieldModule,
+        FormsModule,
         RouterModule.forRoot([
             { path: 'camera', component: QrReaderComponent },
             { path: 'reports', component: ReportsComponent },
+            { path: 'search', component: SearchComponent },
             { path: '', redirectTo: '/camera', pathMatch: 'full' }
         ], { enableTracing: false })], providers: [
         AuthInterceptor,
