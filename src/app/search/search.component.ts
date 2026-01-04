@@ -34,7 +34,9 @@ export class SearchComponent {
 
     // Priority: phone number search first, then email
     if (this.phoneNumber.trim()) {
-      this.eventsRegisterApiService.getUserByPhone(this.phoneNumber.trim(), EVENT_NAME)
+      // Remove all spaces from phone number before sending to API
+      const phoneNumberNoSpaces = this.phoneNumber.replace(/\s/g, '');
+      this.eventsRegisterApiService.getUserByPhone(phoneNumberNoSpaces, EVENT_NAME)
         .subscribe(this.createSearchResultHandler());
     } else if (this.email.trim()) {
       this.eventsRegisterApiService.getUser(this.email.trim(), EVENT_NAME)
