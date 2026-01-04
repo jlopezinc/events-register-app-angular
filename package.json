@@ -22,6 +22,7 @@
     "@angular/router": "^16.2.0",
     "@aws-amplify/ui-angular": "^4.0.9",
     "aws-amplify": "^5.3.11",
+    "ng": "^0.0.0",
     "ngx-scanner-qrcode": "^1.6.4",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
