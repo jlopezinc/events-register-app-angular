@@ -55,10 +55,10 @@ export class SearchComponent {
     return {
       next: (data: UserModel | null) => {
         this.isLoading = false;
-        if (data != null) {
+        if (data !== null) {
           this.currentUser = { ...data };
           this.userNotFound = false;
-          this.userHasComment = data.metadata.comment != undefined;
+          this.userHasComment = data.metadata.comment !== undefined;
           
           // If in live mode, automatically attempt check-in
           if (this.liveMode) {
