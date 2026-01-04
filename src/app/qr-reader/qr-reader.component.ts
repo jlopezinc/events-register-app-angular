@@ -47,9 +47,11 @@ export class QrReaderComponent {
   onCamerasFound(devices: MediaDeviceInfo[]): void {
     this.availableDevices = devices;
     this.isLoading = false;
-    // Try to select back camera by default
-    const backCamera = devices.find(d => /back|rear|environment/gi.test(d.label));
-    this.selectedDevice = backCamera || devices[0];
+    // Try to select back camera by default if devices are available
+    if (devices.length > 0) {
+      const backCamera = devices.find(d => /back|rear|environment/gi.test(d.label));
+      this.selectedDevice = backCamera || devices[0];
+    }
   }
 
   public onScanSuccess(result: string): void {
@@ -80,8 +82,9 @@ export class QrReaderComponent {
 
   public onDeviceSelectChange(selectedIndex: number): void {
     // selectedIndex 0 is the "Select device" option, actual devices start at index 1
-    if (selectedIndex > 0) {
-      this.selectedDevice = this.availableDevices[selectedIndex - 1];
+    const deviceIndex = selectedIndex - 1;
+    if (selectedIndex > 0 && deviceIndex >= 0 && deviceIndex < this.availableDevices.length) {
+      this.selectedDevice = this.availableDevices[deviceIndex];
     }
   }
 
