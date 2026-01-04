@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { EventsRegisterApiService, UserModel } from '../events-register-api.service';
 
+const EVENT_NAME = 'ttamigosnatal2025';
+
 @Component({
     selector: 'app-search',
     templateUrl: './search.component.html',
@@ -32,52 +34,32 @@ export class SearchComponent {
 
     // Priority: phone number search first, then email
     if (this.phoneNumber.trim()) {
-      this.searchByPhone(this.phoneNumber.trim());
+      this.eventsRegisterApiService.getUserByPhone(this.phoneNumber.trim(), EVENT_NAME)
+        .subscribe(this.createSearchResultHandler());
     } else if (this.email.trim()) {
-      this.searchByEmail(this.email.trim());
+      this.eventsRegisterApiService.getUser(this.email.trim(), EVENT_NAME)
+        .subscribe(this.createSearchResultHandler());
     }
   }
 
-  private searchByPhone(phoneNumber: string): void {
-    this.eventsRegisterApiService.getUserByPhone(phoneNumber, 'ttamigosnatal2025')
-      .subscribe({
-        next: (data) => {
-          this.isLoading = false;
-          if (data != null) {
-            this.currentUser = { ...data };
-            this.userNotFound = false;
-          } else {
-            this.currentUser = new UserModel();
-            this.userNotFound = true;
-          }
-        },
-        error: () => {
-          this.isLoading = false;
+  private createSearchResultHandler() {
+    return {
+      next: (data: UserModel | null) => {
+        this.isLoading = false;
+        if (data != null) {
+          this.currentUser = { ...data };
+          this.userNotFound = false;
+        } else {
           this.currentUser = new UserModel();
           this.userNotFound = true;
         }
-      });
-  }
-
-  private searchByEmail(email: string): void {
-    this.eventsRegisterApiService.getUser(email, 'ttamigosnatal2025')
-      .subscribe({
-        next: (data) => {
-          this.isLoading = false;
-          if (data != null) {
-            this.currentUser = { ...data };
-            this.userNotFound = false;
-          } else {
-            this.currentUser = new UserModel();
-            this.userNotFound = true;
-          }
-        },
-        error: () => {
-          this.isLoading = false;
-          this.currentUser = new UserModel();
-          this.userNotFound = true;
-        }
-      });
+      },
+      error: () => {
+        this.isLoading = false;
+        this.currentUser = new UserModel();
+        this.userNotFound = true;
+      }
+    };
   }
 
   public clearSelectedUser(): void {
@@ -90,11 +72,11 @@ export class SearchComponent {
   }
 
   public manualCheckInUser(): void {
-    this.checkInUser(this.currentUser.userEmail, true);
+    this.performCheckIn(this.currentUser.userEmail, true);
   }
 
   public cancelCheckInUser(): void {
-    this.eventsRegisterApiService.cancelCheckInUser(this.currentUser.userEmail, 'ttamigosnatal2025')
+    this.eventsRegisterApiService.cancelCheckInUser(this.currentUser.userEmail, EVENT_NAME)
       .subscribe({
         next: () => {
           this.clearSelectedUser();
@@ -106,8 +88,8 @@ export class SearchComponent {
       });
   }
 
-  private checkInUser(email: string, overrideComment: boolean): void {
-    this.eventsRegisterApiService.getUser(email, 'ttamigosnatal2025')
+  private performCheckIn(email: string, overrideComment: boolean): void {
+    this.eventsRegisterApiService.getUser(email, EVENT_NAME)
       .subscribe({
         next: (data) => {
           if (data == null) {
@@ -118,7 +100,7 @@ export class SearchComponent {
           } else if (!data.paid || (data.metadata.comment != undefined && !overrideComment)) {
             this.currentUser = { ...data };
           } else {
-            this.eventsRegisterApiService.checkInUser(email, 'ttamigosnatal2025')
+            this.eventsRegisterApiService.checkInUser(email, EVENT_NAME)
               .subscribe({
                 next: (data) => {
                   this.currentUser = { ...data };
