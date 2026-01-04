@@ -48,13 +48,15 @@
                   "maximumError": "4kb"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "all",
+              "inlineStyleLanguage": "css"
             },
             "development": {
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true,
-              "namedChunks": true
+              "namedChunks": true,
+              "inlineStyleLanguage": "css"
             }
           },
           "defaultConfiguration": "production"
