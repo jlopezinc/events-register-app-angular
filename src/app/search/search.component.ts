@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { EventsRegisterApiService, UserModel } from '../events-register-api.service';
+import { CheckInModeService } from '../shared/check-in-mode.service';
 
 const EVENT_NAME = 'ttamigosnatal2026';
 
@@ -16,14 +17,22 @@ export class SearchComponent {
   userNotFound: boolean = false;
   isLoading: boolean = false;
   searchPerformed: boolean = false;
+  liveMode: boolean = false; // "modo checkin" flag
+  alreadyCheckedIn: boolean = false;
+  userHasComment: boolean = false;
 
-  constructor(private eventsRegisterApiService: EventsRegisterApiService) { }
+  constructor(
+    private eventsRegisterApiService: EventsRegisterApiService,
+    private checkInModeService: CheckInModeService
+  ) { }
 
   public searchUser(): void {
     // Reset states
     this.userNotFound = false;
     this.searchPerformed = true;
     this.currentUser = new UserModel();
+    this.alreadyCheckedIn = false;
+    this.userHasComment = false;
 
     // Validate that at least one field is filled
     if (!this.phoneNumber.trim() && !this.email.trim()) {
@@ -49,15 +58,25 @@ export class SearchComponent {
         if (data != null) {
           this.currentUser = { ...data };
           this.userNotFound = false;
+          this.userHasComment = data.metadata.comment != undefined;
+          
+          // If in live mode, automatically attempt check-in
+          if (this.liveMode) {
+            this.performCheckIn(data.userEmail, false);
+          }
         } else {
           this.currentUser = new UserModel();
           this.userNotFound = true;
+          this.alreadyCheckedIn = false;
+          this.userHasComment = false;
         }
       },
       error: () => {
         this.isLoading = false;
         this.currentUser = new UserModel();
         this.userNotFound = true;
+        this.alreadyCheckedIn = false;
+        this.userHasComment = false;
       }
     };
   }
@@ -69,6 +88,12 @@ export class SearchComponent {
     this.userNotFound = false;
     this.searchPerformed = false;
     this.isLoading = false;
+    this.alreadyCheckedIn = false;
+    this.userHasComment = false;
+  }
+
+  public setLiveMode(e: any): void {
+    this.liveMode = e.checked;
   }
 
   public manualCheckInUser(): void {
@@ -76,47 +101,19 @@ export class SearchComponent {
   }
 
   public cancelCheckInUser(): void {
-    this.eventsRegisterApiService.cancelCheckInUser(this.currentUser.userEmail, EVENT_NAME)
-      .subscribe({
-        next: () => {
-          this.clearSelectedUser();
-        },
-        error: () => {
-          this.currentUser = new UserModel();
-          this.userNotFound = true;
-        }
+    this.checkInModeService.cancelCheckIn(this.currentUser.userEmail, EVENT_NAME)
+      .subscribe(result => {
+        this.clearSelectedUser();
       });
   }
 
   private performCheckIn(email: string, overrideComment: boolean): void {
-    this.eventsRegisterApiService.getUser(email, EVENT_NAME)
-      .subscribe({
-        next: (data) => {
-          if (data == null) {
-            this.currentUser = new UserModel();
-            this.userNotFound = true;
-          } else if (data.checkedIn) {
-            this.currentUser = { ...data };
-          } else if (!data.paid || (data.metadata.comment != undefined && !overrideComment)) {
-            this.currentUser = { ...data };
-          } else {
-            this.eventsRegisterApiService.checkInUser(email, EVENT_NAME)
-              .subscribe({
-                next: (data) => {
-                  this.currentUser = { ...data };
-                  this.userNotFound = false;
-                },
-                error: () => {
-                  this.currentUser = new UserModel();
-                  this.userNotFound = true;
-                }
-              });
-          }
-        },
-        error: () => {
-          this.currentUser = new UserModel();
-          this.userNotFound = true;
-        }
+    this.checkInModeService.performCheckIn(email, EVENT_NAME, overrideComment)
+      .subscribe(result => {
+        this.currentUser = result.user;
+        this.userNotFound = result.userNotFound;
+        this.alreadyCheckedIn = result.alreadyCheckedIn;
+        this.userHasComment = result.userHasComment;
       });
   }
 }
