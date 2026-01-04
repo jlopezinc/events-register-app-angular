@@ -83,6 +83,11 @@ export class EventsRegisterApiService {
       .pipe(catchError(this.handleError));
   }
 
+  getUserByPhone(phoneNumber: string, eventName: string) {
+    return this.http.get<UserModel>(this.api + '/v1/' + eventName + '/phone/' + phoneNumber)
+      .pipe(catchError(this.handleError));
+  }
+
   getCounters(eventName: string) {
     return this.http.get<Counters>(this.api + '/v1/' + eventName + '/counters')
       .pipe(catchError(this.handleError));

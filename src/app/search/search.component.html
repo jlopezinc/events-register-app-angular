@@ -1,0 +1,71 @@
+<div class="container">
+  <h2>Procurar Participante</h2>
+  
+  <mat-card class="search-card">
+    <mat-card-content>
+      <form class="search-form">
+        <mat-form-field class="full-width" appearance="fill">
+          <mat-label>Número de Telefone</mat-label>
+          <input matInput [(ngModel)]="phoneNumber" name="phoneNumber" placeholder="Ex: +351912345678">
+          <mat-icon matSuffix>phone</mat-icon>
+        </mat-form-field>
+
+        <div class="or-divider">
+          <mat-divider></mat-divider>
+          <span>OU</span>
+          <mat-divider></mat-divider>
+        </div>
+
+        <mat-form-field class="full-width" appearance="fill">
+          <mat-label>Email</mat-label>
+          <input matInput [(ngModel)]="email" name="email" type="email" placeholder="Ex: exemplo@email.com">
+          <mat-icon matSuffix>email</mat-icon>
+        </mat-form-field>
+
+        <button mat-raised-button color="primary" (click)="searchUser()" 
+                [disabled]="isLoading || (!phoneNumber.trim() && !email.trim())"
+                class="search-button">
+          <mat-icon>search</mat-icon>
+          Procurar
+        </button>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<mat-divider></mat-divider>
+
+<!-- Loading indicator -->
+<div *ngIf="isLoading" class="loading-container">
+  <mat-progress-bar mode="indeterminate" color="accent"></mat-progress-bar>
+  <p>A procurar...</p>
+</div>
+
+<!-- User not found message -->
+<ng-container *ngIf="searchPerformed && userNotFound && !isLoading">
+  <mat-card class="mat-app-background basic-container mat-mdc-card-orange">
+    <mat-card-header>
+      <div mat-card-avatar class="example-header-image">
+        <mat-icon class="mat-large" color="warning">dangerous</mat-icon>
+      </div>
+      <mat-card-title>Não encontrado</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content class="card-content">
+      Participante não encontrado com os dados fornecidos!
+    </mat-card-content>
+    <button mat-button (click)="clearSelectedUser()">LIMPAR</button>
+  </mat-card>
+</ng-container>
+
+<mat-divider *ngIf="currentUser.userEmail != ''"></mat-divider>
+
+<!-- User information display -->
+<ng-container *ngIf="currentUser.userEmail != '' && !isLoading" class="mat-typography">
+  <app-user-card 
+    [user]="currentUser" 
+    (clearSelectedUserEvent)="clearSelectedUser()"
+    (manualCheckInSelectedUserEvent)="manualCheckInUser()" 
+    (cancelCheckInSelectedUserEvent)="cancelCheckInUser()">
+  </app-user-card>
+</ng-container>
