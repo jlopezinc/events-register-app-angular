@@ -12,7 +12,7 @@ export class CheckInStatusCardsComponent {
   @Input() userNotFound: boolean = false;
   @Input() alreadyCheckedIn: boolean = false;
   @Input() userHasComment: boolean = false;
-  @Input() currentUser!: UserModel;
+  @Input() currentUser: UserModel = new UserModel();
   @Input() isLoading: boolean = false;
   @Input() searchPerformed: boolean = false; // Only used by search component
 

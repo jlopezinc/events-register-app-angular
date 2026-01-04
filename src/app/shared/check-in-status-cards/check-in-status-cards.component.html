@@ -12,7 +12,7 @@
 </ng-container>
 
 <!-- User not found message -->
-<ng-container *ngIf="(searchPerformed || !searchPerformed) && userNotFound && !isLoading">
+<ng-container *ngIf="userNotFound && !isLoading">
   <mat-card class="mat-app-background basic-container mat-mdc-card-orange">
     <mat-card-header>
       <div mat-card-avatar class="example-header-image">
