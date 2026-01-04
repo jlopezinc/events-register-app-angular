@@ -28,10 +28,7 @@ import { RouterModule } from '@angular/router';
 import { QrReaderComponent } from './qr-reader/qr-reader.component';
 import { ReportsComponent } from './reports/reports.component'
 import { UserCardComponent } from './shared/user-card/user-card.component';
-import { NgxScannerQrcodeModule, LOAD_WASM } from 'ngx-scanner-qrcode';
-
-// Necessary to solve the problem of losing internet connection
-LOAD_WASM().subscribe()
+import { ZXingScannerModule } from '@zxing/ngx-scanner';
 
 Amplify.configure(awsconfig);
 @NgModule({ declarations: [
@@ -53,7 +50,7 @@ Amplify.configure(awsconfig);
         MatListModule,
         MatSidenavModule,
         MatProgressBarModule,
-        NgxScannerQrcodeModule,
+        ZXingScannerModule,
         RouterModule.forRoot([
             { path: 'camera', component: QrReaderComponent },
             { path: 'reports', component: ReportsComponent },

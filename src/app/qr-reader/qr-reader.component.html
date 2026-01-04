@@ -3,7 +3,7 @@
     Modo CheckIn
   </mat-slide-toggle>
 
-  <mat-slide-toggle class="example-margin" color="warn" (change)="onCameraSlideChange($event)" checked="true">
+  <mat-slide-toggle class="example-margin" color="warn" (change)="onCameraSlideChange($event)" [checked]="scannerEnabled">
     Camara
   </mat-slide-toggle>
 
@@ -16,16 +16,23 @@
 <mat-divider></mat-divider>
 
 <div class="col-xs-12 col-md-6 col-lg-4 col-xl-3 my-1">
-  <select #select1 (change)="action.playDevice(select1.value)" class="form-select form-select-sm">
+  <select #select1 (change)="onDeviceChange(availableDevices[select1.selectedIndex - 1])" class="form-select form-select-sm">
     <option [value]="null" selected>Select device</option>
-    <option *ngFor="let c of action.devices.value; let i = index" [value]="c.deviceId"
-      [selected]="i == action.deviceIndexActive">{{c.label}}</option>
+    <option *ngFor="let c of availableDevices; let i = index" [value]="c.deviceId"
+      [selected]="c.deviceId == selectedDevice?.deviceId">{{c.label}}</option>
   </select>
 </div>
 
 <!-- For camera -->
 
-<ngx-scanner-qrcode #action="scanner" (event)="onEvent($event)"></ngx-scanner-qrcode>
+<zxing-scanner 
+  #action
+  [device]="selectedDevice"
+  [enable]="scannerEnabled"
+  (scanSuccess)="onScanSuccess($event)"
+  (camerasFound)="onCamerasFound($event)"
+  [autostart]="true"
+></zxing-scanner>
 
 
 <!-- data  -->
@@ -33,7 +40,7 @@
 
 
 <!-- Loading -->
-<p *ngIf="action.isLoading">⌛ Loading...</p>
+<p *ngIf="isLoading">⌛ Loading...</p>
 
 <mat-divider></mat-divider>
 

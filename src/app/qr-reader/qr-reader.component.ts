@@ -1,12 +1,6 @@
 import { Component } from '@angular/core';
 import { EventsRegisterApiService } from '../events-register-api.service';
-import {
-  ScannerQRCodeConfig,
-  ScannerQRCodeResult,
-  NgxScannerQrcodeService,
-  NgxScannerQrcodeComponent,
-  ScannerQRCodeSelectedFiles,
-} from 'ngx-scanner-qrcode';
+import { ZXingScannerComponent } from '@zxing/ngx-scanner';
 import { ViewChild } from '@angular/core';
 import { UserModel } from '../events-register-api.service';
 import { UserCardComponent } from '../shared/user-card/user-card.component';
@@ -22,7 +16,7 @@ import { UserCardComponent } from '../shared/user-card/user-card.component';
 export class QrReaderComponent {
 
 
-  @ViewChild('action') action!: NgxScannerQrcodeComponent;
+  @ViewChild('action') action!: ZXingScannerComponent;
 
 
   constructor(private eventsRegisterApiService: EventsRegisterApiService) {
@@ -37,23 +31,31 @@ export class QrReaderComponent {
   userNotFound = false;
   alreadyCheckedIn = false;
   userHasComment = false;
+  availableDevices: MediaDeviceInfo[] = [];
+  selectedDevice: MediaDeviceInfo | undefined;
+  scannerEnabled = true;
+  isLoading = true;
 
   ngAfterViewInit(): void {
-    this.action.isReady.subscribe((res: any) => {
-      this.handle(this.action, 'start');
-    });
+    // Camera will autostart with the first available device
   }
 
   ngOnDestroy() {
-    this.action.stop();
+    // Scanner cleanup handled by component
   }
 
-  public onEvent(e: ScannerQRCodeResult[], action?: any): void {
+  onCamerasFound(devices: MediaDeviceInfo[]): void {
+    this.availableDevices = devices;
+    this.isLoading = false;
+    // Try to select back camera by default
+    const backCamera = devices.find(d => /back|rear|environment/gi.test(d.label));
+    this.selectedDevice = backCamera || devices[0];
+  }
 
-    let value = e[0].value;
-    if (this.currentQrCodeValue !== value) {
-      this.currentQrCodeValue = value;
-      console.log(e);
+  public onScanSuccess(result: string): void {
+    if (this.currentQrCodeValue !== result) {
+      this.currentQrCodeValue = result;
+      console.log('QR Code scanned:', result);
       if (this.liveMode) {
         this.checkInUser(this.currentQrCodeValue, false);
       } else {
@@ -65,8 +67,13 @@ export class QrReaderComponent {
   public setLiveMode(e: any) {
     this.liveMode = e.checked;
   }
+  
   public onCameraSlideChange(e: any) {
-    this.action.isStart ? this.action.stop() : this.action.start()
+    this.scannerEnabled = e.checked;
+  }
+
+  public onDeviceChange(device: MediaDeviceInfo): void {
+    this.selectedDevice = device;
   }
 
   public getUserInContext() {
@@ -89,22 +96,6 @@ export class QrReaderComponent {
     this.alreadyCheckedIn = false;
     this.userHasComment = false;
   }
-
-  private handle(action: any, fn: string): void {
-    const playDeviceFacingBack = (devices: any[]) => {
-      // front camera or back camera check here!
-      const device = devices.find(f => (/back|rear|environment/gi.test(f.label))); // Default Back Facing Camera
-      action.playDevice(device ? device.deviceId : devices[0].deviceId);
-    }
-
-    if (fn === 'start') {
-      action[fn](playDeviceFacingBack).subscribe((r: any) => console.log(fn, r), alert);
-    } else {
-      action[fn]().subscribe((r: any) => console.log(fn, r), alert);
-    }
-  }
-
-
 
   private getUserFromApi(email: string) {
     this.currentUser = new UserModel();
