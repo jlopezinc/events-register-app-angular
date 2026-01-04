@@ -16,6 +16,7 @@
         <mat-list-item>Total quads checked in: {{counters.checkedInQuad}} -
           {{checkedInQuadPercentage | number}}%</mat-list-item>
         <mat-list-item>Total inscritos: {{counters.total}}</mat-list-item>
+        <mat-list-item>Faltam check in (inscrições) : {{counters.total - counters.checkedInCar - counters.checkedInMotorcycle - counters.checkedInQuad}}</mat-list-item>
       </mat-list>
     </section>
 
