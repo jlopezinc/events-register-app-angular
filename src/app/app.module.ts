@@ -32,6 +32,7 @@ import { QrReaderComponent } from './qr-reader/qr-reader.component';
 import { ReportsComponent } from './reports/reports.component';
 import { SearchComponent } from './search/search.component';
 import { UserCardComponent } from './shared/user-card/user-card.component';
+import { CheckInStatusCardsComponent } from './shared/check-in-status-cards/check-in-status-cards.component';
 import { ZXingScannerModule } from '@zxing/ngx-scanner';
 
 Amplify.configure(awsconfig);
@@ -39,6 +40,7 @@ Amplify.configure(awsconfig);
         AppComponent,
         QrReaderComponent,
         UserCardComponent,
+        CheckInStatusCardsComponent,
         ReportsComponent,
         SearchComponent
     ],

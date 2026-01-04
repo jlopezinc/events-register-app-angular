@@ -38,94 +38,26 @@
 <!-- data  -->
 <mat-divider></mat-divider>
 
-
 <!-- Loading -->
 <p *ngIf="isLoading">⌛ Loading...</p>
 
 <mat-divider></mat-divider>
 
-<ng-container *ngIf="liveMode && userNotFound == false && alreadyCheckedIn == false
-              && currentUser.userEmail != '' && currentUser.paid && !userHasComment">
-  <mat-card class="mat-app-background basic-container mat-mdc-card-green">
-    <mat-card-header>
-      <div mat-card-avatar class="example-header-image">
-        <mat-icon class="mat-large">done_outline</mat-icon>
-      </div>
-      <mat-card-title></mat-card-title>
-    </mat-card-header>
-  </mat-card>
-</ng-container>
-
-<ng-container *ngIf="userNotFound">
-  <mat-card class="mat-app-background basic-container mat-mdc-card-orange">
-    <mat-card-header>
-      <div mat-card-avatar class="example-header-image">
-        <mat-icon class="mat-large" color="warning">dangerous</mat-icon>
-      </div>
-      <mat-card-title>Não encontrado</mat-card-title>
-    </mat-card-header>
-
-    <mat-card-content class="card-content">
-      Email não encontrado/QR code não reconhecido!
-    </mat-card-content>
-    <button mat-button (click)="clearSelectedUser()">LIMPAR</button>
-  </mat-card>
-</ng-container>
-
-<ng-container *ngIf="liveMode && userNotFound == false && currentUser.userEmail != '' && !currentUser.paid">
-  <mat-card class="mat-app-background basic-container mat-mdc-card-orange">
-    <mat-card-header>
-      <div mat-card-avatar class="example-header-image">
-        <mat-icon class="mat-large" color="warning">dangerous</mat-icon>
-      </div>
-      <mat-card-title>Não Pago!</mat-card-title>
-    </mat-card-header>
-
-    <mat-card-content class="card-content">
-      Inscrição não está paga!
-    </mat-card-content>
-    <button mat-button (click)="clearSelectedUser()">LIMPAR</button>
-  </mat-card>
-</ng-container>
-
-<ng-container *ngIf="alreadyCheckedIn">
-  <mat-card class="mat-app-background basic-container mat-mdc-card-orange">
-    <mat-card-header>
-      <div mat-card-avatar class="example-header-image">
-        <mat-icon class="mat-large" color="warning">warning</mat-icon>
-      </div>
-      <mat-card-title>Já foi checked in!</mat-card-title>
-    </mat-card-header>
-
-    <mat-card-content class="card-content">
-      Email/utilizador já checked in! Em: {{currentUser.metadata.checkIn.checkInAt | date : "medium"}}
-    </mat-card-content>
-    <button mat-button (click)="clearSelectedUser()">LIMPAR</button>
-  </mat-card>
-</ng-container>
-
-<ng-container *ngIf="userHasComment">
-  <mat-card
-    class="mat-app-background basic-container {{currentUser.checkedIn ? 'mat-mdc-card-yellow' : 'mat-mdc-card-orange'}}">
-    <mat-card-header>
-      <div mat-card-avatar class="example-header-image">
-        <mat-icon class="mat-large" color="warning">warning</mat-icon>
-      </div>
-      <mat-card-title>{{currentUser.checkedIn ? 'Comentário' : 'Verificar Comentário'}}</mat-card-title>
-    </mat-card-header>
-
-    <mat-card-content class="card-content">
-      {{currentUser.metadata.comment}}
-    </mat-card-content>
-    <button mat-button (click)="clearSelectedUser()">LIMPAR</button>
-    <button mat-button *ngIf="!currentUser.checkedIn && currentUser.paid" (click)="manualCheckInUser()">FAZER CHECK IN
-      (JÁ
-      VERIFICADO)</button>
-  </mat-card>
-</ng-container>
+<!-- Status cards -->
+<app-check-in-status-cards
+  [liveMode]="liveMode"
+  [userNotFound]="userNotFound"
+  [alreadyCheckedIn]="alreadyCheckedIn"
+  [userHasComment]="userHasComment"
+  [currentUser]="currentUser"
+  [isLoading]="isLoading"
+  (clearSelectedUserEvent)="clearSelectedUser()"
+  (manualCheckInUserEvent)="manualCheckInUser()">
+  <span notFoundMessage>Email não encontrado/QR code não reconhecido!</span>
+</app-check-in-status-cards>
 
 <mat-divider></mat-divider>
-<ng-container *ngIf="currentUser.userEmail != ''" class="mat-typography">
+<ng-container *ngIf="currentUser.userEmail !== ''" class="mat-typography">
   <app-user-card [user]="currentUser" (clearSelectedUserEvent)="clearSelectedUser()"
     (manualCheckInSelectedUserEvent)="manualCheckInUser()" (cancelCheckInSelectedUserEvent)="cancelCheckInUser()">
   </app-user-card>
@@ -133,4 +65,4 @@
 
 <mat-divider></mat-divider>
 <!-- todo -->
-<span *ngIf="currentUser.userEmail != ''">{{currentUser | json}}</span>
+<span *ngIf="currentUser.userEmail !== ''">{{currentUser | json}}</span>
