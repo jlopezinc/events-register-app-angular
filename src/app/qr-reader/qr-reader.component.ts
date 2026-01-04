@@ -74,16 +74,10 @@ export class QrReaderComponent {
     this.scannerEnabled = e.checked;
   }
 
-  public onDeviceChange(device: MediaDeviceInfo | undefined): void {
-    if (device) {
-      this.selectedDevice = device;
-    }
-  }
-
   public onDeviceSelectChange(selectedIndex: number): void {
     // selectedIndex 0 is the "Select device" option, actual devices start at index 1
     const deviceIndex = selectedIndex - 1;
-    if (selectedIndex > 0 && deviceIndex >= 0 && deviceIndex < this.availableDevices.length) {
+    if (selectedIndex > 0 && deviceIndex < this.availableDevices.length) {
       this.selectedDevice = this.availableDevices[deviceIndex];
     }
   }
