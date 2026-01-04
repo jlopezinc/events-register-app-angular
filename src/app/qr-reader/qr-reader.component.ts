@@ -13,10 +13,11 @@ import { UserCardComponent } from '../shared/user-card/user-card.component';
 
 
 @Component({
-  selector: 'app-qr-reader',
-  templateUrl: './qr-reader.component.html',
-  styleUrls: ['./qr-reader.component.css'],
-  providers: [EventsRegisterApiService, UserCardComponent]
+    selector: 'app-qr-reader',
+    templateUrl: './qr-reader.component.html',
+    styleUrls: ['./qr-reader.component.css'],
+    providers: [EventsRegisterApiService, UserCardComponent],
+    standalone: false
 })
 export class QrReaderComponent {
 

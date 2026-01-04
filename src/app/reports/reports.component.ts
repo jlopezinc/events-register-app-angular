@@ -2,9 +2,10 @@ import { Component } from '@angular/core';
 import { Counters, EventsRegisterApiService } from '../events-register-api.service';
 
 @Component({
-  selector: 'reports',
-  templateUrl: './reports.component.html',
-  styleUrls: ['./reports.component.css']
+    selector: 'reports',
+    templateUrl: './reports.component.html',
+    styleUrls: ['./reports.component.css'],
+    standalone: false
 })
 export class ReportsComponent {
 
