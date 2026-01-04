@@ -8,7 +8,7 @@ import { AmplifyAuthenticatorModule } from '@aws-amplify/ui-angular';
 import awsconfig from '../aws-exports';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 import { AuthInterceptor } from './auth-interceptor';
 
@@ -34,45 +34,37 @@ import { NgxScannerQrcodeModule, LOAD_WASM } from 'ngx-scanner-qrcode';
 LOAD_WASM().subscribe()
 
 Amplify.configure(awsconfig);
-@NgModule({
-  declarations: [
-    AppComponent,
-    QrReaderComponent,
-    UserCardComponent,
-    ReportsComponent
-  ],
-  imports: [
-    BrowserModule,
-    AmplifyAuthenticatorModule,
-    BrowserAnimationsModule,
-    MatIconModule,
-    MatToolbarModule,
-    MatButtonModule,
-    MatDividerModule,
-    MatSlideToggleModule,
-    MatCardModule,
-    MatGridListModule,
-    HttpClientModule,
-    MatListModule,
-    MatSidenavModule,
-    MatProgressBarModule,
-    NgxScannerQrcodeModule,
-    RouterModule.forRoot(
-      [
-        { path: 'camera', component: QrReaderComponent },
-        { path: 'reports', component: ReportsComponent },
-        { path: '', redirectTo: '/camera', pathMatch: 'full' }
-      ],
-      { enableTracing: false })
-  ],
-  providers: [
-    AuthInterceptor,
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AuthInterceptor,
-      multi: true
-    }
-  ],
-  bootstrap: [AppComponent]
-})
+@NgModule({ declarations: [
+        AppComponent,
+        QrReaderComponent,
+        UserCardComponent,
+        ReportsComponent
+    ],
+    bootstrap: [AppComponent], imports: [BrowserModule,
+        AmplifyAuthenticatorModule,
+        BrowserAnimationsModule,
+        MatIconModule,
+        MatToolbarModule,
+        MatButtonModule,
+        MatDividerModule,
+        MatSlideToggleModule,
+        MatCardModule,
+        MatGridListModule,
+        MatListModule,
+        MatSidenavModule,
+        MatProgressBarModule,
+        NgxScannerQrcodeModule,
+        RouterModule.forRoot([
+            { path: 'camera', component: QrReaderComponent },
+            { path: 'reports', component: ReportsComponent },
+            { path: '', redirectTo: '/camera', pathMatch: 'full' }
+        ], { enableTracing: false })], providers: [
+        AuthInterceptor,
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: AuthInterceptor,
+            multi: true
+        },
+        provideHttpClient(withInterceptorsFromDi())
+    ] })
 export class AppModule { }
