@@ -14,7 +14,7 @@ export class CheckInStatusCardsComponent {
   @Input() userHasComment: boolean = false;
   @Input() currentUser: UserModel = new UserModel();
   @Input() isLoading: boolean = false;
-  @Input() searchPerformed: boolean = false; // Only used by search component
+  @Input() searchPerformed: boolean = true; // Default true for QR reader behavior
 
   @Output() clearSelectedUserEvent = new EventEmitter<void>();
   @Output() manualCheckInUserEvent = new EventEmitter<void>();
