@@ -6,6 +6,7 @@ import { UserModel } from '../events-register-api.service';
 import { UserCardComponent } from '../shared/user-card/user-card.component';
 import { CheckInModeService } from '../shared/check-in-mode.service';
 
+const EVENT_NAME = 'ttamigosnatal2026';
 
 @Component({
     selector: 'app-qr-reader',
@@ -109,7 +110,7 @@ export class QrReaderComponent {
 
   private getUserFromApi(email: string) {
     this.currentUser = new UserModel();
-    this.checkInModeService.getUserWithState(email, 'ttamigosnatal2026')
+    this.checkInModeService.getUserWithState(email, EVENT_NAME)
       .subscribe(result => {
         this.currentUser = result.user;
         this.userNotFound = result.userNotFound;
@@ -120,7 +121,7 @@ export class QrReaderComponent {
 
 
   private checkInUser(email: string, overrideComment: boolean) {
-    this.checkInModeService.performCheckIn(email, 'ttamigosnatal2026', overrideComment)
+    this.checkInModeService.performCheckIn(email, EVENT_NAME, overrideComment)
       .subscribe(result => {
         this.currentUser = result.user;
         this.userNotFound = result.userNotFound;
@@ -130,7 +131,7 @@ export class QrReaderComponent {
   }
 
   public cancelCheckIn(email: string) {
-    this.checkInModeService.cancelCheckIn(email, 'ttamigosnatal2026')
+    this.checkInModeService.cancelCheckIn(email, EVENT_NAME)
       .subscribe(result => {
         this.currentUser = new UserModel();
         this.userNotFound = result.userNotFound;

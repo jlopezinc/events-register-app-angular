@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { map, catchError, switchMap } from 'rxjs/operators';
 import { EventsRegisterApiService, UserModel } from '../events-register-api.service';
 
 /**
@@ -21,38 +22,31 @@ export class CheckInModeService {
    * @returns Observable with user data, userNotFound, alreadyCheckedIn, and userHasComment flags
    */
   public getUserWithState(email: string, eventName: string): Observable<UserStateResult> {
-    return new Observable(observer => {
-      this.eventsRegisterApiService.getUser(email, eventName)
-        .subscribe({
-          next: (data) => {
-            if (data != null) {
-              observer.next({
-                user: { ...data },
-                userNotFound: false,
-                alreadyCheckedIn: false,
-                userHasComment: data.metadata.comment != undefined
-              });
-            } else {
-              observer.next({
-                user: new UserModel(),
-                userNotFound: true,
-                alreadyCheckedIn: false,
-                userHasComment: false
-              });
-            }
-            observer.complete();
-          },
-          error: () => {
-            observer.next({
-              user: new UserModel(),
-              userNotFound: true,
-              alreadyCheckedIn: false,
-              userHasComment: false
-            });
-            observer.complete();
-          }
-        });
-    });
+    return this.eventsRegisterApiService.getUser(email, eventName).pipe(
+      map(data => {
+        if (data != null) {
+          return {
+            user: { ...data },
+            userNotFound: false,
+            alreadyCheckedIn: data.checkedIn,
+            userHasComment: data.metadata.comment !== undefined
+          };
+        } else {
+          return {
+            user: new UserModel(),
+            userNotFound: true,
+            alreadyCheckedIn: false,
+            userHasComment: false
+          };
+        }
+      }),
+      catchError(() => of({
+        user: new UserModel(),
+        userNotFound: true,
+        alreadyCheckedIn: false,
+        userHasComment: false
+      }))
+    );
   }
 
   /**
@@ -63,78 +57,60 @@ export class CheckInModeService {
    * @returns Observable with check-in result
    */
   public performCheckIn(email: string, eventName: string, overrideComment: boolean): Observable<CheckInResult> {
-    return new Observable(observer => {
-      this.eventsRegisterApiService.getUser(email, eventName)
-        .subscribe({
-          next: (data) => {
-            if (data == null) {
-              observer.next({
-                user: new UserModel(),
-                userNotFound: true,
-                alreadyCheckedIn: false,
-                userHasComment: false,
-                success: false
-              });
-              observer.complete();
-            } else if (data.checkedIn) {
-              // User is already checked in
-              observer.next({
-                user: { ...data },
-                userNotFound: false,
-                alreadyCheckedIn: true,
-                userHasComment: data.metadata.comment != undefined,
-                success: false
-              });
-              observer.complete();
-            } else if (!data.paid || (data.metadata.comment != undefined && !overrideComment)) {
-              // User hasn't paid or has a comment that needs manual verification
-              observer.next({
-                user: { ...data },
-                userNotFound: false,
-                alreadyCheckedIn: false,
-                userHasComment: data.metadata.comment != undefined,
-                success: false
-              });
-              observer.complete();
-            } else {
-              // All validations passed, perform check-in
-              this.eventsRegisterApiService.checkInUser(email, eventName)
-                .subscribe({
-                  next: (checkedInData) => {
-                    observer.next({
-                      user: { ...checkedInData },
-                      userNotFound: false,
-                      alreadyCheckedIn: false,
-                      userHasComment: false,
-                      success: true
-                    });
-                    observer.complete();
-                  },
-                  error: () => {
-                    observer.next({
-                      user: new UserModel(),
-                      userNotFound: true,
-                      alreadyCheckedIn: false,
-                      userHasComment: false,
-                      success: false
-                    });
-                    observer.complete();
-                  }
-                });
-            }
-          },
-          error: () => {
-            observer.next({
+    return this.eventsRegisterApiService.getUser(email, eventName).pipe(
+      switchMap(data => {
+        if (data == null) {
+          return of({
+            user: new UserModel(),
+            userNotFound: true,
+            alreadyCheckedIn: false,
+            userHasComment: false,
+            success: false
+          });
+        } else if (data.checkedIn) {
+          return of({
+            user: { ...data },
+            userNotFound: false,
+            alreadyCheckedIn: true,
+            userHasComment: data.metadata.comment !== undefined,
+            success: false
+          });
+        } else if (!data.paid || (data.metadata.comment !== undefined && !overrideComment)) {
+          return of({
+            user: { ...data },
+            userNotFound: false,
+            alreadyCheckedIn: false,
+            userHasComment: data.metadata.comment !== undefined,
+            success: false
+          });
+        } else {
+          // All validations passed, perform check-in
+          return this.eventsRegisterApiService.checkInUser(email, eventName).pipe(
+            map(checkedInData => ({
+              user: { ...checkedInData },
+              userNotFound: false,
+              alreadyCheckedIn: false,
+              userHasComment: false,
+              success: true
+            })),
+            catchError(() => of({
               user: new UserModel(),
               userNotFound: true,
               alreadyCheckedIn: false,
               userHasComment: false,
               success: false
-            });
-            observer.complete();
-          }
-        });
-    });
+            }))
+          );
+        }
+      }),
+      catchError(() => of({
+        user: new UserModel(),
+        userNotFound: true,
+        alreadyCheckedIn: false,
+        userHasComment: false,
+        success: false
+      }))
+    );
   }
 
   /**
@@ -144,25 +120,16 @@ export class CheckInModeService {
    * @returns Observable with cancellation result
    */
   public cancelCheckIn(email: string, eventName: string): Observable<CancelCheckInResult> {
-    return new Observable(observer => {
-      this.eventsRegisterApiService.cancelCheckInUser(email, eventName)
-        .subscribe({
-          next: () => {
-            observer.next({
-              success: true,
-              userNotFound: false
-            });
-            observer.complete();
-          },
-          error: () => {
-            observer.next({
-              success: false,
-              userNotFound: true
-            });
-            observer.complete();
-          }
-        });
-    });
+    return this.eventsRegisterApiService.cancelCheckInUser(email, eventName).pipe(
+      map(() => ({
+        success: true,
+        userNotFound: false
+      })),
+      catchError(() => of({
+        success: false,
+        userNotFound: true
+      }))
+    );
   }
 }
 

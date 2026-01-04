@@ -40,8 +40,8 @@
 <mat-divider></mat-divider>
 
 <!-- Success indicator for live mode -->
-<ng-container *ngIf="liveMode && userNotFound == false && alreadyCheckedIn == false
-              && currentUser.userEmail != '' && currentUser.paid && !userHasComment && !isLoading">
+<ng-container *ngIf="liveMode && userNotFound === false && alreadyCheckedIn === false
+              && currentUser.userEmail !== '' && currentUser.paid && !userHasComment && !isLoading">
   <mat-card class="mat-app-background basic-container mat-mdc-card-green">
     <mat-card-header>
       <div mat-card-avatar class="example-header-image">
@@ -76,7 +76,7 @@
 </ng-container>
 
 <!-- User not paid warning -->
-<ng-container *ngIf="liveMode && userNotFound == false && currentUser.userEmail != '' && !currentUser.paid && !isLoading">
+<ng-container *ngIf="liveMode && userNotFound === false && currentUser.userEmail !== '' && !currentUser.paid && !isLoading">
   <mat-card class="mat-app-background basic-container mat-mdc-card-orange">
     <mat-card-header>
       <div mat-card-avatar class="example-header-image">
@@ -130,10 +130,10 @@
   </mat-card>
 </ng-container>
 
-<mat-divider *ngIf="currentUser.userEmail != ''"></mat-divider>
+<mat-divider *ngIf="currentUser.userEmail !== ''"></mat-divider>
 
 <!-- User information display -->
-<ng-container *ngIf="currentUser.userEmail != '' && !isLoading" class="mat-typography">
+<ng-container *ngIf="currentUser.userEmail !== '' && !isLoading" class="mat-typography">
   <app-user-card 
     [user]="currentUser" 
     (clearSelectedUserEvent)="clearSelectedUser()"
