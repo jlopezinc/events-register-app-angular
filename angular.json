@@ -68,10 +68,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "events-register-app-angular:build:production"
+              "buildTarget": "events-register-app-angular:build:production"
             },
             "development": {
-              "browserTarget": "events-register-app-angular:build:development"
+              "buildTarget": "events-register-app-angular:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -79,7 +79,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "events-register-app-angular:build"
+            "buildTarget": "events-register-app-angular:build"
           }
         },
         "test": {
