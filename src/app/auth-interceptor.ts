@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Auth } from "aws-amplify";
+import { fetchAuthSession } from "aws-amplify/auth";
 import { HttpInterceptor, HttpRequest, HttpHandler } from "@angular/common/http";
 import { from } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
@@ -13,10 +13,11 @@ export class AuthInterceptor implements HttpInterceptor {
   authToken = "";
 
   intercept(req: HttpRequest<any>, next: HttpHandler) {
-    return from(Auth.currentSession()).pipe(
-      switchMap((data) => {
+    return from(fetchAuthSession()).pipe(
+      switchMap((session) => {
+        const token = session.tokens?.idToken?.toString() || '';
         const authReq = req.clone({
-          headers: req.headers.set('Authorization', 'Bearer ' + data.getIdToken().getJwtToken())
+          headers: req.headers.set('Authorization', 'Bearer ' + token)
         });
       return next.handle(authReq);
       })
