@@ -36,8 +36,10 @@ export class SearchComponent {
     if (this.phoneNumber.trim()) {
       // Remove all spaces from phone number before sending to API
       const phoneNumberNoSpaces = this.phoneNumber.replace(/\s/g, '');
-      this.eventsRegisterApiService.getUserByPhone(phoneNumberNoSpaces, EVENT_NAME)
-        .subscribe(this.createSearchResultHandler());
+      if (phoneNumberNoSpaces) {
+        this.eventsRegisterApiService.getUserByPhone(phoneNumberNoSpaces, EVENT_NAME)
+          .subscribe(this.createSearchResultHandler());
+      }
     } else if (this.email.trim()) {
       this.eventsRegisterApiService.getUser(this.email.trim(), EVENT_NAME)
         .subscribe(this.createSearchResultHandler());

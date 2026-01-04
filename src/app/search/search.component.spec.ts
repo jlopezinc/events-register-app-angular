@@ -116,4 +116,12 @@ describe('SearchComponent', () => {
 
     expect(apiService.getUserByPhone).toHaveBeenCalledWith('+351912345678', 'ttamigosnatal2026');
   });
+
+  it('should not call API when phone number contains only spaces', () => {
+    component.phoneNumber = '   ';
+    component.searchUser();
+
+    expect(apiService.getUserByPhone).not.toHaveBeenCalled();
+    expect(apiService.getUser).not.toHaveBeenCalled();
+  });
 });
