@@ -38,6 +38,7 @@
   <mat-card-actions>
     <button mat-button *ngIf="!user.checkedIn && user.paid" (click)="manualCheckInUser()">CHECK IN</button>
     <button mat-button *ngIf="user.checkedIn" (click)="cancelCheckInUser()">CANCELAR CHECK IN</button>
+    <button mat-button (click)="editUser()">EDITAR</button>
     <button mat-button (click)="clearSelectedUser()">LIMPAR</button>
   </mat-card-actions>
 </mat-card>

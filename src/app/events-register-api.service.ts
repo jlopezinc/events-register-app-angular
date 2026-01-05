@@ -105,6 +105,11 @@ export class EventsRegisterApiService {
       .pipe(catchError(this.handleError));
   }
 
+  updateUser(email: string, eventName: string, userData: UserModel) {
+    return this.http.put<UserModel>(this.api + '/v1/' + eventName + '/' + email, userData)
+      .pipe(catchError(this.handleError));
+  }
+
 
 
   private handleError(error: HttpErrorResponse) {

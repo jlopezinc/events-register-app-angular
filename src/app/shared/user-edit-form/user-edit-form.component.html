@@ -1,0 +1,141 @@
+<h2 mat-dialog-title>Editar Utilizador</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="userForm" class="edit-form">
+    
+    <!-- Driver Information Section -->
+    <section class="form-section">
+      <h3>Informação do Condutor</h3>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Nome</mat-label>
+        <input matInput formControlName="driverName" placeholder="Nome completo" required>
+        <mat-error *ngIf="userForm.get('driverName')?.hasError('required')">
+          Nome é obrigatório
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>CC/Cartão de Cidadão</mat-label>
+        <input matInput formControlName="driverCC" placeholder="Número do CC">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Telefone</mat-label>
+        <input matInput type="tel" formControlName="driverPhone" placeholder="+351912345678">
+        <mat-hint>Formato: +351912345678</mat-hint>
+      </mat-form-field>
+    </section>
+
+    <!-- Vehicle Information Section -->
+    <section class="form-section">
+      <h3>Informação do Veículo</h3>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Tipo de Veículo</mat-label>
+        <mat-select formControlName="vehicleType" required>
+          <mat-option value="car">Carro</mat-option>
+          <mat-option value="motorcycle">Moto</mat-option>
+          <mat-option value="quad">Quad</mat-option>
+        </mat-select>
+        <mat-error *ngIf="userForm.get('vehicleType')?.hasError('required')">
+          Tipo de veículo é obrigatório
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Matrícula</mat-label>
+        <input matInput formControlName="vehiclePlate" placeholder="AB-12-CD" required style="text-transform: uppercase">
+        <mat-error *ngIf="userForm.get('vehiclePlate')?.hasError('required')">
+          Matrícula é obrigatória
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Marca</mat-label>
+        <input matInput formControlName="vehicleMake" placeholder="Marca do veículo">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Modelo</mat-label>
+        <input matInput formControlName="vehicleModel" placeholder="Modelo do veículo">
+      </mat-form-field>
+    </section>
+
+    <!-- Guests Section -->
+    <section class="form-section">
+      <h3>Convidados ({{guestsArray.length}})</h3>
+      <div formArrayName="guests">
+        <div *ngFor="let guest of guestsArray.controls; let i = index; trackBy: trackByIndex" 
+             [formGroupName]="i" 
+             class="guest-item">
+          <h4>Convidado {{i + 1}}</h4>
+          
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Tipo</mat-label>
+            <mat-select formControlName="type">
+              <mat-option value="driver">Condutor</mat-option>
+              <mat-option value="guest">Convidado</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Nome</mat-label>
+            <input matInput formControlName="name" placeholder="Nome do convidado">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>CC/Cartão de Cidadão</mat-label>
+            <input matInput formControlName="cc" placeholder="Número do CC">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Telefone</mat-label>
+            <input matInput type="tel" formControlName="phoneNumber" placeholder="+351912345678">
+          </mat-form-field>
+
+          <button mat-icon-button color="warn" type="button" (click)="removeGuest(i)" *ngIf="guestsArray.length > 1">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </div>
+
+      <button mat-raised-button type="button" (click)="addGuest()" color="primary">
+        <mat-icon>add</mat-icon>
+        Adicionar Convidado
+      </button>
+    </section>
+
+    <!-- Payment & Status Section -->
+    <section class="form-section">
+      <h3>Pagamento e Estado</h3>
+      
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Informação de Pagamento</mat-label>
+        <textarea matInput formControlName="paymentInfo" rows="3" placeholder="Detalhes do pagamento"></textarea>
+      </mat-form-field>
+
+      <div class="paid-toggle">
+        <mat-slide-toggle formControlName="paid">
+          Pago
+        </mat-slide-toggle>
+      </div>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Comentário</mat-label>
+        <textarea matInput formControlName="comment" rows="3" placeholder="Comentários do administrador"></textarea>
+        <mat-icon matPrefix *ngIf="hasComment" color="warn">warning</mat-icon>
+        <mat-hint *ngIf="hasComment">Este utilizador tem um comentário de atenção</mat-hint>
+      </mat-form-field>
+    </section>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()" [disabled]="isLoading">
+    Cancelar
+  </button>
+  <button mat-raised-button color="primary" (click)="onSave()" [disabled]="isLoading || userForm.invalid">
+    <mat-spinner *ngIf="isLoading" diameter="20" style="display: inline-block; margin-right: 8px;"></mat-spinner>
+    Guardar
+  </button>
+</mat-dialog-actions>
+

@@ -25,13 +25,18 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatSelectModule } from '@angular/material/select';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { RouterModule } from '@angular/router';
 import { QrReaderComponent } from './qr-reader/qr-reader.component';
 import { ReportsComponent } from './reports/reports.component';
 import { SearchComponent } from './search/search.component';
 import { UserCardComponent } from './shared/user-card/user-card.component';
+import { UserEditFormComponent } from './shared/user-edit-form/user-edit-form.component';
 import { CheckInStatusCardsComponent } from './shared/check-in-status-cards/check-in-status-cards.component';
 import { ZXingScannerModule } from '@zxing/ngx-scanner';
 
@@ -40,6 +45,7 @@ Amplify.configure(awsconfig);
         AppComponent,
         QrReaderComponent,
         UserCardComponent,
+        UserEditFormComponent,
         CheckInStatusCardsComponent,
         ReportsComponent,
         SearchComponent
@@ -61,6 +67,11 @@ Amplify.configure(awsconfig);
         MatInputModule,
         MatFormFieldModule,
         FormsModule,
+        ReactiveFormsModule,
+        MatDialogModule,
+        MatSnackBarModule,
+        MatSelectModule,
+        MatProgressSpinnerModule,
         RouterModule.forRoot([
             { path: 'camera', component: QrReaderComponent },
             { path: 'reports', component: ReportsComponent },
