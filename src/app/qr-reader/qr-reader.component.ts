@@ -174,22 +174,23 @@ export class QrReaderComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result && result.success) {
-        // Refresh user data
-        this.getUserFromApi(this.currentUser.userEmail);
-        
-        // Check if in live mode and user is now valid for auto check-in
-        if (this.liveMode && result.user) {
-          const user = result.user;
-          const isValidForCheckIn = user.paid && !user.checkedIn && !user.metadata.comment;
-          
-          if (isValidForCheckIn) {
-            // Auto check-in the user
-            this.checkInUser(user.userEmail, false);
+        // Refresh user data and handle auto check-in
+        this.checkInModeService.handleUserEditRefresh(
+          this.currentUser.userEmail,
+          EVENT_NAME,
+          this.liveMode
+        ).subscribe(refreshResult => {
+          this.currentUser = refreshResult.user;
+          this.userNotFound = refreshResult.userNotFound;
+          this.alreadyCheckedIn = refreshResult.alreadyCheckedIn;
+          this.userHasComment = refreshResult.userHasComment;
+
+          if (refreshResult.autoCheckedIn) {
             this.snackBar.open('Utilizador atualizado e check-in efetuado!', 'Fechar', {
               duration: 3000
             });
           }
-        }
+        });
       }
     });
   }

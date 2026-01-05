@@ -159,32 +159,23 @@ export class SearchComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result && result.success) {
-        // Refresh user data
-        this.eventsRegisterApiService.getUser(this.currentUser.userEmail, EVENT_NAME)
-          .subscribe({
-            next: (data: UserModel | null) => {
-              if (data !== null) {
-                this.currentUser = { ...data };
-                this.userHasComment = data.metadata.comment !== undefined;
-                
-                // Check if in live mode and user is now valid for auto check-in
-                if (this.liveMode) {
-                  const isValidForCheckIn = data.paid && !data.checkedIn && !data.metadata.comment;
-                  
-                  if (isValidForCheckIn) {
-                    // Auto check-in the user
-                    this.performCheckIn(data.userEmail, false);
-                    this.snackBar.open('Utilizador atualizado e check-in efetuado!', 'Fechar', {
-                      duration: 3000
-                    });
-                  }
-                }
-              }
-            },
-            error: () => {
-              console.error('Error refreshing user data');
-            }
-          });
+        // Refresh user data and handle auto check-in
+        this.checkInModeService.handleUserEditRefresh(
+          this.currentUser.userEmail,
+          EVENT_NAME,
+          this.liveMode
+        ).subscribe(refreshResult => {
+          this.currentUser = refreshResult.user;
+          this.userNotFound = refreshResult.userNotFound;
+          this.alreadyCheckedIn = refreshResult.alreadyCheckedIn;
+          this.userHasComment = refreshResult.userHasComment;
+
+          if (refreshResult.autoCheckedIn) {
+            this.snackBar.open('Utilizador atualizado e check-in efetuado!', 'Fechar', {
+              duration: 3000
+            });
+          }
+        });
       }
     });
   }

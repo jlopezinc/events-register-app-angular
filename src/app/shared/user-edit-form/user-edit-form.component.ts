@@ -20,7 +20,7 @@ export class UserEditFormComponent implements OnInit, OnDestroy {
   userForm!: FormGroup;
   isLoading = false;
   vehicleTypes = ['car', 'motorcycle', 'quad'];
-  guestTypes = ['driver', 'passenger'];
+  guestTypes = ['driver', 'guest'];
   private subscriptions: Subscription[] = [];
 
   constructor(
@@ -84,7 +84,7 @@ export class UserEditFormComponent implements OnInit, OnDestroy {
 
   createGuestFormGroup(guest: People = new People()): FormGroup {
     return this.fb.group({
-      type: [guest.type || 'passenger'],
+      type: [guest.type || 'guest'],
       name: [guest.name],
       cc: [guest.cc],
       phoneNumber: [guest.phoneNumber]

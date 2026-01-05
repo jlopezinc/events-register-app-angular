@@ -166,6 +166,60 @@ export class CheckInModeService {
       }))
     );
   }
+
+  /**
+   * Handle post-edit user refresh and auto check-in logic
+   * @param email User email
+   * @param eventName Event name
+   * @param liveMode Whether live mode is enabled
+   * @returns Observable with refresh result and auto check-in status
+   */
+  public handleUserEditRefresh(email: string, eventName: string, liveMode: boolean): Observable<UserEditRefreshResult> {
+    return this.eventsRegisterApiService.getUser(email, eventName).pipe(
+      switchMap(data => {
+        if (data === null) {
+          return of({
+            user: new UserModel(),
+            userNotFound: true,
+            alreadyCheckedIn: false,
+            userHasComment: false,
+            autoCheckedIn: false
+          });
+        }
+
+        const userHasComment = data.metadata.comment !== undefined;
+        const isValidForCheckIn = liveMode && data.paid && !data.checkedIn && !data.metadata.comment;
+
+        if (isValidForCheckIn) {
+          // Auto check-in the user
+          return this.performCheckIn(email, eventName, false).pipe(
+            map(checkInResult => ({
+              user: checkInResult.user,
+              userNotFound: checkInResult.userNotFound,
+              alreadyCheckedIn: false,
+              userHasComment: false,
+              autoCheckedIn: checkInResult.success
+            }))
+          );
+        } else {
+          return of({
+            user: { ...data },
+            userNotFound: false,
+            alreadyCheckedIn: data.checkedIn,
+            userHasComment: userHasComment,
+            autoCheckedIn: false
+          });
+        }
+      }),
+      catchError(() => of({
+        user: new UserModel(),
+        userNotFound: true,
+        alreadyCheckedIn: false,
+        userHasComment: false,
+        autoCheckedIn: false
+      }))
+    );
+  }
 }
 
 /**
@@ -191,4 +245,11 @@ export interface CheckInResult extends UserStateResult {
 export interface CancelCheckInResult {
   success: boolean;
   userNotFound: boolean;
+}
+
+/**
+ * Result of user edit refresh with auto check-in
+ */
+export interface UserEditRefreshResult extends UserStateResult {
+  autoCheckedIn: boolean;
 }
