@@ -31,12 +31,13 @@ describe('EventsRegisterApiService', () => {
     
     const email = 'test@example.com';
     const eventName = 'testEvent';
+    const expectedUrl = 'https://3692kus1h1.execute-api.eu-north-1.amazonaws.com/v1/testEvent/test@example.com';
     
     service.updateUser(email, eventName, mockUser).subscribe(user => {
       expect(user).toEqual(mockUser);
     });
 
-    const req = httpMock.expectOne(`${service.api}/v1/${eventName}/${email}`);
+    const req = httpMock.expectOne(expectedUrl);
     expect(req.request.method).toBe('PUT');
     expect(req.request.body).toEqual(mockUser);
     req.flush(mockUser);
@@ -46,6 +47,7 @@ describe('EventsRegisterApiService', () => {
     const mockUser = new UserModel();
     const email = 'test@example.com';
     const eventName = 'testEvent';
+    const expectedUrl = 'https://3692kus1h1.execute-api.eu-north-1.amazonaws.com/v1/testEvent/test@example.com';
     
     service.updateUser(email, eventName, mockUser).subscribe({
       next: () => fail('should have failed with 500 error'),
@@ -54,7 +56,7 @@ describe('EventsRegisterApiService', () => {
       }
     });
 
-    const req = httpMock.expectOne(`${service.api}/v1/${eventName}/${email}`);
+    const req = httpMock.expectOne(expectedUrl);
     req.flush('Error', { status: 500, statusText: 'Server Error' });
   });
 });
