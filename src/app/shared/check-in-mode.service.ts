@@ -64,7 +64,7 @@ export class CheckInModeService {
             user: { ...data },
             userNotFound: false,
             alreadyCheckedIn: data.checkedIn,
-            userHasComment: data.metadata.comment !== undefined
+            userHasComment: data.metadata.comment != null && data.metadata.comment !== ''
           };
         } else {
           return {
@@ -107,15 +107,15 @@ export class CheckInModeService {
             user: { ...data },
             userNotFound: false,
             alreadyCheckedIn: true,
-            userHasComment: data.metadata.comment !== undefined,
+            userHasComment: data.metadata.comment != null && data.metadata.comment !== '',
             success: false
           });
-        } else if (!data.paid || (data.metadata.comment !== undefined && !overrideComment)) {
+        } else if (!data.paid || (data.metadata.comment != null && data.metadata.comment !== '' && !overrideComment)) {
           return of({
             user: { ...data },
             userNotFound: false,
             alreadyCheckedIn: false,
-            userHasComment: data.metadata.comment !== undefined,
+            userHasComment: data.metadata.comment != null && data.metadata.comment !== '',
             success: false
           });
         } else {
@@ -187,8 +187,8 @@ export class CheckInModeService {
           });
         }
 
-        const userHasComment = data.metadata.comment !== undefined;
-        const isValidForCheckIn = liveMode && data.paid && !data.checkedIn && !data.metadata.comment;
+        const userHasComment = data.metadata.comment != null && data.metadata.comment !== '';
+        const isValidForCheckIn = liveMode && data.paid && !data.checkedIn && !(data.metadata.comment != null && data.metadata.comment !== '');
 
         if (isValidForCheckIn) {
           // Auto check-in the user

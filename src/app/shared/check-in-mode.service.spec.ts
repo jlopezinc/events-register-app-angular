@@ -65,6 +65,32 @@ describe('CheckInModeService', () => {
       });
     });
 
+    it('should set userHasComment=false when comment is null', (done) => {
+      const mockUser = new UserModel();
+      mockUser.userEmail = 'test@example.com';
+      mockUser.metadata.comment = null as any;
+
+      apiServiceSpy.getUser.and.returnValue(of(mockUser));
+
+      service.getUserWithState('test@example.com', 'event2026').subscribe(result => {
+        expect(result.userHasComment).toBeFalse();
+        done();
+      });
+    });
+
+    it('should set userHasComment=false when comment is empty string', (done) => {
+      const mockUser = new UserModel();
+      mockUser.userEmail = 'test@example.com';
+      mockUser.metadata.comment = '';
+
+      apiServiceSpy.getUser.and.returnValue(of(mockUser));
+
+      service.getUserWithState('test@example.com', 'event2026').subscribe(result => {
+        expect(result.userHasComment).toBeFalse();
+        done();
+      });
+    });
+
     it('should handle API errors gracefully', (done) => {
       apiServiceSpy.getUser.and.returnValue(throwError(() => new Error('API Error')));
 
@@ -172,6 +198,65 @@ describe('CheckInModeService', () => {
       service.performCheckIn('test@example.com', 'event2026', true).subscribe(result => {
         expect(result.success).toBeTrue();
         expect(apiServiceSpy.checkInUser).toHaveBeenCalled();
+        done();
+      });
+    });
+
+    it('should check in user when comment is null', (done) => {
+      const mockUser = new UserModel();
+      mockUser.userEmail = 'test@example.com';
+      mockUser.paid = true;
+      mockUser.checkedIn = false;
+      mockUser.metadata.comment = null as any;
+
+      const checkedInUser = { ...mockUser };
+      checkedInUser.checkedIn = true;
+
+      apiServiceSpy.getUser.and.returnValue(of(mockUser));
+      apiServiceSpy.checkInUser.and.returnValue(of(checkedInUser));
+
+      service.performCheckIn('test@example.com', 'event2026', false).subscribe(result => {
+        expect(result.success).toBeTrue();
+        expect(result.userHasComment).toBeFalse();
+        expect(apiServiceSpy.checkInUser).toHaveBeenCalled();
+        done();
+      });
+    });
+
+    it('should check in user when comment is empty string', (done) => {
+      const mockUser = new UserModel();
+      mockUser.userEmail = 'test@example.com';
+      mockUser.paid = true;
+      mockUser.checkedIn = false;
+      mockUser.metadata.comment = '';
+
+      const checkedInUser = { ...mockUser };
+      checkedInUser.checkedIn = true;
+
+      apiServiceSpy.getUser.and.returnValue(of(mockUser));
+      apiServiceSpy.checkInUser.and.returnValue(of(checkedInUser));
+
+      service.performCheckIn('test@example.com', 'event2026', false).subscribe(result => {
+        expect(result.success).toBeTrue();
+        expect(result.userHasComment).toBeFalse();
+        expect(apiServiceSpy.checkInUser).toHaveBeenCalled();
+        done();
+      });
+    });
+
+    it('should set userHasComment=false for already checked in user when comment is null', (done) => {
+      const mockUser = new UserModel();
+      mockUser.userEmail = 'test@example.com';
+      mockUser.paid = true;
+      mockUser.checkedIn = true;
+      mockUser.metadata.comment = null as any;
+
+      apiServiceSpy.getUser.and.returnValue(of(mockUser));
+
+      service.performCheckIn('test@example.com', 'event2026', false).subscribe(result => {
+        expect(result.success).toBeFalse();
+        expect(result.alreadyCheckedIn).toBeTrue();
+        expect(result.userHasComment).toBeFalse();
         done();
       });
     });
