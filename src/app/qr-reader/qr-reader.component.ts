@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { EventsRegisterApiService } from '../events-register-api.service';
 import { ZXingScannerComponent } from '@zxing/ngx-scanner';
 import { ViewChild } from '@angular/core';
@@ -16,7 +16,7 @@ const EVENT_NAME = 'ttamigosnatal2026';
     providers: [EventsRegisterApiService, UserCardComponent],
     standalone: false
 })
-export class QrReaderComponent {
+export class QrReaderComponent implements OnInit, OnDestroy {
 
 
   @ViewChild('action') action!: ZXingScannerComponent;

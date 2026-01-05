@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { EventsRegisterApiService, UserModel } from '../events-register-api.service';
 import { CheckInModeService } from '../shared/check-in-mode.service';
 import { Subscription } from 'rxjs';
@@ -11,7 +11,7 @@ const EVENT_NAME = 'ttamigosnatal2026';
     styleUrls: ['./search.component.css'],
     standalone: false
 })
-export class SearchComponent {
+export class SearchComponent implements OnInit, OnDestroy {
   phoneNumber: string = '';
   email: string = '';
   currentUser: UserModel = new UserModel();
