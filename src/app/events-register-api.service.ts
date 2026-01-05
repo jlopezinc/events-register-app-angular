@@ -95,18 +95,18 @@ export class EventsRegisterApiService {
 
   checkInUser(email: string, eventName: string) {
     // todo, send byWho
-    return this.http.put<UserModel>(this.api + '/v1/' + eventName + '/' + email + '/checkin', null)
+    return this.http.put<UserModel>(this.api + '/v2/' + eventName + '/' + email + '/checkin', null)
       .pipe(catchError(this.handleError));
   }
 
   cancelCheckInUser(email: string, eventName: string) {
     // todo, send byWho
-    return this.http.delete<UserModel>(this.api + '/v1/' + eventName + '/' + email)
+    return this.http.delete<UserModel>(this.api + '/v2/' + eventName + '/' + email + '/checkin')
       .pipe(catchError(this.handleError));
   }
 
   updateUser(email: string, eventName: string, userData: UserModel) {
-    return this.http.put<UserModel>(this.api + '/v1/' + eventName + '/' + email, userData)
+    return this.http.put<UserModel>(this.api + '/v2/' + eventName + '/' + email, userData)
       .pipe(catchError(this.handleError));
   }
 
