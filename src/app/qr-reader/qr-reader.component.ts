@@ -62,7 +62,7 @@ export class QrReaderComponent implements OnInit, OnDestroy {
     // Camera will autostart with the first available device
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     // Scanner cleanup handled by component
     // Unsubscribe from the check-in mode state
     if (this.checkInModeSubscription) {
