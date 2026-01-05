@@ -92,7 +92,7 @@ export class SearchComponent implements OnInit, OnDestroy {
         if (data !== null) {
           this.currentUser = { ...data };
           this.userNotFound = false;
-          this.userHasComment = data.metadata.comment !== undefined;
+          this.userHasComment = data.metadata.comment != null && data.metadata.comment !== '';
           
           // If in live mode, automatically attempt check-in
           if (this.liveMode) {

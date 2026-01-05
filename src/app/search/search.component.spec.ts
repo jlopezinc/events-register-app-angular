@@ -124,4 +124,40 @@ describe('SearchComponent', () => {
     expect(apiService.getUserByPhone).not.toHaveBeenCalled();
     expect(apiService.getUser).not.toHaveBeenCalled();
   });
+
+  it('should set userHasComment=false when comment is null', () => {
+    const mockUser = new UserModel();
+    mockUser.userEmail = 'test@example.com';
+    mockUser.metadata.comment = null as any;
+    apiService.getUserByPhone.and.returnValue(of(mockUser));
+
+    component.phoneNumber = '1234567890';
+    component.searchUser();
+
+    expect(component.userHasComment).toBeFalse();
+  });
+
+  it('should set userHasComment=false when comment is empty string', () => {
+    const mockUser = new UserModel();
+    mockUser.userEmail = 'test@example.com';
+    mockUser.metadata.comment = '';
+    apiService.getUserByPhone.and.returnValue(of(mockUser));
+
+    component.phoneNumber = '1234567890';
+    component.searchUser();
+
+    expect(component.userHasComment).toBeFalse();
+  });
+
+  it('should set userHasComment=true when comment has a value', () => {
+    const mockUser = new UserModel();
+    mockUser.userEmail = 'test@example.com';
+    mockUser.metadata.comment = 'Check ID';
+    apiService.getUserByPhone.and.returnValue(of(mockUser));
+
+    component.phoneNumber = '1234567890';
+    component.searchUser();
+
+    expect(component.userHasComment).toBeTrue();
+  });
 });
