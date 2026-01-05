@@ -55,7 +55,8 @@
 <mat-divider></mat-divider>
 <ng-container *ngIf="currentUser.userEmail !== ''" class="mat-typography">
   <app-user-card [user]="currentUser" (clearSelectedUserEvent)="clearSelectedUser()"
-    (manualCheckInSelectedUserEvent)="manualCheckInUser()" (cancelCheckInSelectedUserEvent)="cancelCheckInUser()">
+    (manualCheckInSelectedUserEvent)="manualCheckInUser()" (cancelCheckInSelectedUserEvent)="cancelCheckInUser()"
+    (editUserEvent)="onEditUser()">
   </app-user-card>
 </ng-container>
 

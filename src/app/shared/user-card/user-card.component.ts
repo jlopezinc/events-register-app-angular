@@ -14,6 +14,7 @@ export class UserCardComponent {
   @Output() clearSelectedUserEvent = new EventEmitter<void>();
   @Output() manualCheckInSelectedUserEvent = new EventEmitter<void>();
   @Output() cancelCheckInSelectedUserEvent = new EventEmitter<void>();
+  @Output() editUserEvent = new EventEmitter<void>();
 
   constructor() { }
 
@@ -27,6 +28,10 @@ export class UserCardComponent {
 
   public cancelCheckInUser() {
     this.cancelCheckInSelectedUserEvent.emit();
+  }
+
+  public editUser() {
+    this.editUserEvent.emit();
   }
 
 }

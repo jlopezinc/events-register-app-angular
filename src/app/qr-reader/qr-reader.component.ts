@@ -6,6 +6,9 @@ import { UserModel } from '../events-register-api.service';
 import { UserCardComponent } from '../shared/user-card/user-card.component';
 import { CheckInModeService } from '../shared/check-in-mode.service';
 import { Subscription } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { UserEditFormComponent } from '../shared/user-edit-form/user-edit-form.component';
 
 const EVENT_NAME = 'ttamigosnatal2026';
 
@@ -24,7 +27,9 @@ export class QrReaderComponent implements OnInit, OnDestroy {
 
   constructor(
     private eventsRegisterApiService: EventsRegisterApiService,
-    private checkInModeService: CheckInModeService
+    private checkInModeService: CheckInModeService,
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
   ) {
 
   }
@@ -155,5 +160,37 @@ export class QrReaderComponent implements OnInit, OnDestroy {
         this.alreadyCheckedIn = false;
         this.userHasComment = false;
       });
+  }
+
+  public onEditUser() {
+    const dialogRef = this.dialog.open(UserEditFormComponent, {
+      width: '600px',
+      maxWidth: '90vw',
+      data: {
+        user: this.currentUser,
+        eventName: EVENT_NAME
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result && result.success) {
+        // Refresh user data
+        this.getUserFromApi(this.currentUser.userEmail);
+        
+        // Check if in live mode and user is now valid for auto check-in
+        if (this.liveMode && result.user) {
+          const user = result.user;
+          const isValidForCheckIn = user.paid && !user.checkedIn && !user.metadata.comment;
+          
+          if (isValidForCheckIn) {
+            // Auto check-in the user
+            this.checkInUser(user.userEmail, false);
+            this.snackBar.open('Utilizador atualizado e check-in efetuado!', 'Fechar', {
+              duration: 3000
+            });
+          }
+        }
+      }
+    });
   }
 }

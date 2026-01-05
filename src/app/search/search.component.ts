@@ -2,6 +2,9 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { EventsRegisterApiService, UserModel } from '../events-register-api.service';
 import { CheckInModeService } from '../shared/check-in-mode.service';
 import { Subscription } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { UserEditFormComponent } from '../shared/user-edit-form/user-edit-form.component';
 
 const EVENT_NAME = 'ttamigosnatal2026';
 
@@ -33,7 +36,9 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   constructor(
     private eventsRegisterApiService: EventsRegisterApiService,
-    private checkInModeService: CheckInModeService
+    private checkInModeService: CheckInModeService,
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
   ) { }
 
   ngOnInit(): void {
@@ -140,5 +145,47 @@ export class SearchComponent implements OnInit, OnDestroy {
         this.alreadyCheckedIn = result.alreadyCheckedIn;
         this.userHasComment = result.userHasComment;
       });
+  }
+
+  public onEditUser(): void {
+    const dialogRef = this.dialog.open(UserEditFormComponent, {
+      width: '600px',
+      maxWidth: '90vw',
+      data: {
+        user: this.currentUser,
+        eventName: EVENT_NAME
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result && result.success) {
+        // Refresh user data
+        this.eventsRegisterApiService.getUser(this.currentUser.userEmail, EVENT_NAME)
+          .subscribe({
+            next: (data: UserModel | null) => {
+              if (data !== null) {
+                this.currentUser = { ...data };
+                this.userHasComment = data.metadata.comment !== undefined;
+                
+                // Check if in live mode and user is now valid for auto check-in
+                if (this.liveMode) {
+                  const isValidForCheckIn = data.paid && !data.checkedIn && !data.metadata.comment;
+                  
+                  if (isValidForCheckIn) {
+                    // Auto check-in the user
+                    this.performCheckIn(data.userEmail, false);
+                    this.snackBar.open('Utilizador atualizado e check-in efetuado!', 'Fechar', {
+                      duration: 3000
+                    });
+                  }
+                }
+              }
+            },
+            error: () => {
+              console.error('Error refreshing user data');
+            }
+          });
+      }
+    });
   }
 }
