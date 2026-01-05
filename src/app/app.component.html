@@ -18,13 +18,15 @@
           </button>
           <span>TT Amigos Natal 2026</span>
           <span class="example-spacer"></span>
-          <mat-slide-toggle 
-            class="header-toggle" 
-            color="accent" 
-            [checked]="checkInMode$ | async"
-            (change)="onCheckInModeToggle($event)">
-            Modo CheckIn
-          </mat-slide-toggle>
+          <div class="check-in-toggle-container">
+            <mat-icon>how_to_reg</mat-icon>
+            <mat-slide-toggle 
+              color="accent" 
+              [checked]="checkInMode$ | async"
+              (change)="onCheckInModeToggle($event)">
+              Modo CheckIn
+            </mat-slide-toggle>
+          </div>
           <button mat-icon-button (click)="signOut()">
             <mat-icon>logout</mat-icon>
           </button>
