@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, of, BehaviorSubject } from 'rxjs';
 import { map, catchError, switchMap } from 'rxjs/operators';
 import { EventsRegisterApiService, UserModel } from '../events-register-api.service';
 
@@ -7,13 +7,48 @@ import { EventsRegisterApiService, UserModel } from '../events-register-api.serv
  * Service to manage check-in mode logic and user state management.
  * This service centralizes the business logic for check-in/check-out workflows
  * and makes it reusable across different components (QR Reader, Search, etc.)
+ * 
+ * It also manages the global "modo checkin" (live mode) toggle state,
+ * ensuring it stays synchronized across all views.
  */
 @Injectable({
   providedIn: 'root'
 })
 export class CheckInModeService {
 
+  /**
+   * BehaviorSubject to manage the "modo checkin" (live mode) state.
+   * When enabled, users are automatically checked in when scanned/searched.
+   */
+  private checkInModeEnabled$ = new BehaviorSubject<boolean>(false);
+
   constructor(private eventsRegisterApiService: EventsRegisterApiService) { }
+
+  /**
+   * Get an observable of the current check-in mode state.
+   * Subscribe to this to react to changes in the check-in mode toggle.
+   * @returns Observable<boolean> - emits true when check-in mode is enabled
+   */
+  public getCheckInModeState(): Observable<boolean> {
+    return this.checkInModeEnabled$.asObservable();
+  }
+
+  /**
+   * Get the current check-in mode state as a boolean value.
+   * @returns boolean - true if check-in mode is enabled
+   */
+  public isCheckInModeEnabled(): boolean {
+    return this.checkInModeEnabled$.value;
+  }
+
+  /**
+   * Set the check-in mode state.
+   * This will notify all subscribers of the state change.
+   * @param enabled - true to enable check-in mode, false to disable
+   */
+  public setCheckInMode(enabled: boolean): void {
+    this.checkInModeEnabled$.next(enabled);
+  }
 
   /**
    * Get user from API and update state flags

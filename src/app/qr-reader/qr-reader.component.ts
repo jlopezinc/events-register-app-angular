@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { EventsRegisterApiService } from '../events-register-api.service';
 import { ZXingScannerComponent } from '@zxing/ngx-scanner';
 import { ViewChild } from '@angular/core';
 import { UserModel } from '../events-register-api.service';
 import { UserCardComponent } from '../shared/user-card/user-card.component';
 import { CheckInModeService } from '../shared/check-in-mode.service';
+import { Subscription } from 'rxjs';
 
 const EVENT_NAME = 'ttamigosnatal2026';
 
@@ -15,7 +16,7 @@ const EVENT_NAME = 'ttamigosnatal2026';
     providers: [EventsRegisterApiService, UserCardComponent],
     standalone: false
 })
-export class QrReaderComponent {
+export class QrReaderComponent implements OnInit, OnDestroy {
 
 
   @ViewChild('action') action!: ZXingScannerComponent;
@@ -28,7 +29,15 @@ export class QrReaderComponent {
 
   }
 
+  /**
+   * Subscription to the check-in mode state from the shared service
+   */
+  private checkInModeSubscription?: Subscription;
 
+  /**
+   * Local variable to track the check-in mode state
+   * Synchronized with the shared service
+   */
   liveMode = false;
 
   currentQrCodeValue = "";
@@ -41,12 +50,24 @@ export class QrReaderComponent {
   scannerEnabled = true;
   isLoading = true;
 
+  ngOnInit(): void {
+    // Subscribe to the shared check-in mode state
+    this.checkInModeSubscription = this.checkInModeService.getCheckInModeState()
+      .subscribe(enabled => {
+        this.liveMode = enabled;
+      });
+  }
+
   ngAfterViewInit(): void {
     // Camera will autostart with the first available device
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     // Scanner cleanup handled by component
+    // Unsubscribe from the check-in mode state
+    if (this.checkInModeSubscription) {
+      this.checkInModeSubscription.unsubscribe();
+    }
   }
 
   onCamerasFound(devices: MediaDeviceInfo[]): void {
@@ -69,10 +90,6 @@ export class QrReaderComponent {
         this.getUserFromApi(this.currentQrCodeValue);
       }
     }
-  }
-
-  public setLiveMode(e: any) {
-    this.liveMode = e.checked;
   }
   
   public onCameraSlideChange(e: any) {
