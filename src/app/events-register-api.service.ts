@@ -95,7 +95,7 @@ export class EventsRegisterApiService {
 
   checkInUser(email: string, eventName: string) {
     // todo, send byWho
-    return this.http.put<UserModel>(this.api + '/v1/' + eventName + '/' + email, null)
+    return this.http.put<UserModel>(this.api + '/v1/' + eventName + '/' + email + '/checkin', null)
       .pipe(catchError(this.handleError));
   }
 
