@@ -1,0 +1,84 @@
+<!-- Success indicator for live mode -->
+<ng-container *ngIf="liveMode && userNotFound === false && alreadyCheckedIn === false
+              && currentUser.userEmail !== '' && currentUser.paid && !userHasComment && !isLoading">
+  <mat-card class="mat-app-background basic-container mat-mdc-card-green">
+    <mat-card-header>
+      <div mat-card-avatar class="example-header-image">
+        <mat-icon class="mat-large">done_outline</mat-icon>
+      </div>
+      <mat-card-title></mat-card-title>
+    </mat-card-header>
+  </mat-card>
+</ng-container>
+
+<!-- User not found message -->
+<ng-container *ngIf="userNotFound && !isLoading && searchPerformed">
+  <mat-card class="mat-app-background basic-container mat-mdc-card-orange">
+    <mat-card-header>
+      <div mat-card-avatar class="example-header-image">
+        <mat-icon class="mat-large" color="warning">dangerous</mat-icon>
+      </div>
+      <mat-card-title>Não encontrado</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content class="card-content">
+      <ng-content select="[notFoundMessage]"></ng-content>
+    </mat-card-content>
+    <button mat-button (click)="clearSelectedUser()">LIMPAR</button>
+  </mat-card>
+</ng-container>
+
+<!-- User not paid warning -->
+<ng-container *ngIf="liveMode && userNotFound === false && currentUser.userEmail !== '' && !currentUser.paid && !isLoading">
+  <mat-card class="mat-app-background basic-container mat-mdc-card-orange">
+    <mat-card-header>
+      <div mat-card-avatar class="example-header-image">
+        <mat-icon class="mat-large" color="warning">dangerous</mat-icon>
+      </div>
+      <mat-card-title>Não Pago!</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content class="card-content">
+      Inscrição não está paga!
+    </mat-card-content>
+    <button mat-button (click)="clearSelectedUser()">LIMPAR</button>
+  </mat-card>
+</ng-container>
+
+<!-- Already checked in warning -->
+<ng-container *ngIf="alreadyCheckedIn && !isLoading">
+  <mat-card class="mat-app-background basic-container mat-mdc-card-orange">
+    <mat-card-header>
+      <div mat-card-avatar class="example-header-image">
+        <mat-icon class="mat-large" color="warning">warning</mat-icon>
+      </div>
+      <mat-card-title>Já foi checked in!</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content class="card-content">
+      Email/utilizador já checked in! Em: {{currentUser.metadata.checkIn.checkInAt | date : "medium"}}
+    </mat-card-content>
+    <button mat-button (click)="clearSelectedUser()">LIMPAR</button>
+  </mat-card>
+</ng-container>
+
+<!-- User has comment warning -->
+<ng-container *ngIf="userHasComment && !isLoading">
+  <mat-card
+    class="mat-app-background basic-container {{currentUser.checkedIn ? 'mat-mdc-card-yellow' : 'mat-mdc-card-orange'}}">
+    <mat-card-header>
+      <div mat-card-avatar class="example-header-image">
+        <mat-icon class="mat-large" color="warning">warning</mat-icon>
+      </div>
+      <mat-card-title>{{currentUser.checkedIn ? 'Comentário' : 'Verificar Comentário'}}</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content class="card-content">
+      {{currentUser.metadata.comment}}
+    </mat-card-content>
+    <button mat-button (click)="clearSelectedUser()">LIMPAR</button>
+    <button mat-button *ngIf="!currentUser.checkedIn && currentUser.paid" (click)="manualCheckInUser()">FAZER CHECK IN
+      (JÁ
+      VERIFICADO)</button>
+  </mat-card>
+</ng-container>

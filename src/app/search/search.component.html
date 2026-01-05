@@ -1,6 +1,10 @@
 <div class="container">
   <h2>Procurar Participante</h2>
   
+  <mat-slide-toggle class="example-margin" color="primary" (change)="setLiveMode($event)">
+    Modo CheckIn
+  </mat-slide-toggle>
+  
   <mat-card class="search-card">
     <mat-card-content>
       <form class="search-form">
@@ -41,27 +45,24 @@
   <p>A procurar...</p>
 </div>
 
-<!-- User not found message -->
-<ng-container *ngIf="searchPerformed && userNotFound && !isLoading">
-  <mat-card class="mat-app-background basic-container mat-mdc-card-orange">
-    <mat-card-header>
-      <div mat-card-avatar class="example-header-image">
-        <mat-icon class="mat-large" color="warning">dangerous</mat-icon>
-      </div>
-      <mat-card-title>Não encontrado</mat-card-title>
-    </mat-card-header>
+<!-- Status cards -->
+<app-check-in-status-cards
+  [liveMode]="liveMode"
+  [userNotFound]="userNotFound"
+  [alreadyCheckedIn]="alreadyCheckedIn"
+  [userHasComment]="userHasComment"
+  [currentUser]="currentUser"
+  [isLoading]="isLoading"
+  [searchPerformed]="searchPerformed"
+  (clearSelectedUserEvent)="clearSelectedUser()"
+  (manualCheckInUserEvent)="manualCheckInUser()">
+  <span notFoundMessage>Participante não encontrado com os dados fornecidos!</span>
+</app-check-in-status-cards>
 
-    <mat-card-content class="card-content">
-      Participante não encontrado com os dados fornecidos!
-    </mat-card-content>
-    <button mat-button (click)="clearSelectedUser()">LIMPAR</button>
-  </mat-card>
-</ng-container>
-
-<mat-divider *ngIf="currentUser.userEmail != ''"></mat-divider>
+<mat-divider *ngIf="currentUser.userEmail !== ''"></mat-divider>
 
 <!-- User information display -->
-<ng-container *ngIf="currentUser.userEmail != '' && !isLoading" class="mat-typography">
+<ng-container *ngIf="currentUser.userEmail !== '' && !isLoading" class="mat-typography">
   <app-user-card 
     [user]="currentUser" 
     (clearSelectedUserEvent)="clearSelectedUser()"

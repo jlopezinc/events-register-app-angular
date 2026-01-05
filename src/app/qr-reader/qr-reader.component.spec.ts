@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { QrReaderComponent } from './qr-reader.component';
 
@@ -8,7 +9,8 @@ describe('QrReaderComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [QrReaderComponent]
+      declarations: [QrReaderComponent],
+      imports: [HttpClientTestingModule]
     });
     fixture = TestBed.createComponent(QrReaderComponent);
     component = fixture.componentInstance;
