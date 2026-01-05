@@ -199,4 +199,53 @@ describe('CheckInModeService', () => {
       });
     });
   });
+
+  describe('Check-In Mode Toggle State Management', () => {
+    it('should initialize with check-in mode disabled', () => {
+      expect(service.isCheckInModeEnabled()).toBeFalse();
+    });
+
+    it('should enable check-in mode when setCheckInMode is called with true', () => {
+      service.setCheckInMode(true);
+      expect(service.isCheckInModeEnabled()).toBeTrue();
+    });
+
+    it('should disable check-in mode when setCheckInMode is called with false', () => {
+      service.setCheckInMode(true);
+      service.setCheckInMode(false);
+      expect(service.isCheckInModeEnabled()).toBeFalse();
+    });
+
+    it('should emit state changes to subscribers', (done) => {
+      const states: boolean[] = [];
+      
+      service.getCheckInModeState().subscribe(state => {
+        states.push(state);
+        
+        // After collecting 3 states (initial false, then true, then false)
+        if (states.length === 3) {
+          expect(states).toEqual([false, true, false]);
+          done();
+        }
+      });
+
+      // Trigger state changes
+      service.setCheckInMode(true);
+      service.setCheckInMode(false);
+    });
+
+    it('should notify all subscribers of state changes', () => {
+      const subscriber1Values: boolean[] = [];
+      const subscriber2Values: boolean[] = [];
+
+      service.getCheckInModeState().subscribe(state => subscriber1Values.push(state));
+      service.getCheckInModeState().subscribe(state => subscriber2Values.push(state));
+
+      service.setCheckInMode(true);
+      service.setCheckInMode(false);
+
+      expect(subscriber1Values).toEqual([false, true, false]);
+      expect(subscriber2Values).toEqual([false, true, false]);
+    });
+  });
 });

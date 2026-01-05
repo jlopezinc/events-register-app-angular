@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { EventsRegisterApiService, UserModel } from '../events-register-api.service';
 import { CheckInModeService } from '../shared/check-in-mode.service';
+import { Subscription } from 'rxjs';
 
 const EVENT_NAME = 'ttamigosnatal2026';
 
@@ -17,14 +18,38 @@ export class SearchComponent {
   userNotFound: boolean = false;
   isLoading: boolean = false;
   searchPerformed: boolean = false;
-  liveMode: boolean = false; // "modo checkin" flag
+  /**
+   * Local variable to track the check-in mode state
+   * Synchronized with the shared service
+   */
+  liveMode: boolean = false;
   alreadyCheckedIn: boolean = false;
   userHasComment: boolean = false;
+
+  /**
+   * Subscription to the check-in mode state from the shared service
+   */
+  private checkInModeSubscription?: Subscription;
 
   constructor(
     private eventsRegisterApiService: EventsRegisterApiService,
     private checkInModeService: CheckInModeService
   ) { }
+
+  ngOnInit(): void {
+    // Subscribe to the shared check-in mode state
+    this.checkInModeSubscription = this.checkInModeService.getCheckInModeState()
+      .subscribe(enabled => {
+        this.liveMode = enabled;
+      });
+  }
+
+  ngOnDestroy(): void {
+    // Unsubscribe from the check-in mode state
+    if (this.checkInModeSubscription) {
+      this.checkInModeSubscription.unsubscribe();
+    }
+  }
 
   public searchUser(): void {
     // Reset states
@@ -94,10 +119,6 @@ export class SearchComponent {
     this.isLoading = false;
     this.alreadyCheckedIn = false;
     this.userHasComment = false;
-  }
-
-  public setLiveMode(e: any): void {
-    this.liveMode = e.checked;
   }
 
   public manualCheckInUser(): void {

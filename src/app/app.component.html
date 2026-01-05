@@ -18,6 +18,13 @@
           </button>
           <span>TT Amigos Natal 2026</span>
           <span class="example-spacer"></span>
+          <mat-slide-toggle 
+            class="header-toggle" 
+            color="accent" 
+            [checked]="checkInMode$ | async"
+            (change)="onCheckInModeToggle($event)">
+            Modo CheckIn
+          </mat-slide-toggle>
           <button mat-icon-button (click)="signOut()">
             <mat-icon>logout</mat-icon>
           </button>

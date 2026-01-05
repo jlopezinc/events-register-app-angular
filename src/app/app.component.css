@@ -19,3 +19,7 @@
   top: 0;
   z-index: 1;
 }
+
+.header-toggle {
+  margin-right: 16px;
+}
