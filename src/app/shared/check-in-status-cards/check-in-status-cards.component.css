@@ -1,1 +1,33 @@
-/* Component-specific styles can be added here if needed */
+/* Status card color classes */
+.mat-mdc-card-green {
+  background-color: greenyellow;
+}
+
+.mat-mdc-card-orange {
+  background-color: orangered;
+}
+
+.mat-mdc-card-yellow {
+  background-color: #fff9c4;
+  border-left: 4px solid #fbc02d;
+}
+
+.basic-container {
+  margin: 20px;
+}
+
+.card-content {
+  padding: 16px 0;
+}
+
+.example-header-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mat-large {
+  font-size: 48px;
+  width: 48px;
+  height: 48px;
+}
