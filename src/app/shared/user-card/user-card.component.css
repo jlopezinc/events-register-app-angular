@@ -6,102 +6,75 @@
   background: red;
 }
 
-/* Ensure card and all content is properly constrained */
-mat-card {
-  overflow-x: hidden !important;
-}
+/* 
+ * Audit Trail Styles - Mobile First Approach
+ * Optimized for Pixel 7a (412px width)
+ */
 
+/* Ensure parent containers don't overflow */
+mat-card,
 mat-card-content {
-  overflow-x: hidden !important;
+  overflow-x: hidden;
 }
 
-/* Ensure mat-accordion doesn't overflow */
 mat-accordion {
-  overflow: hidden;
+  display: block;
   width: 100%;
-  max-width: 100%;
-  box-sizing: border-box;
+  overflow: hidden;
 }
 
-/* Audit Trail Styles */
+/* Expansion Panel - Mobile First */
 .audit-trail-panel {
   margin-top: 16px;
-  overflow: hidden;
   width: 100%;
-  max-width: 100%;
-  box-sizing: border-box;
+  overflow: hidden;
 }
 
+/* Header - constrain all elements */
 .audit-trail-panel ::ng-deep .mat-expansion-panel-header {
-  overflow: hidden;
-  padding-left: 16px !important;
-  padding-right: 16px !important;
+  padding: 12px 8px;
+  min-height: 48px;
 }
 
 .audit-trail-panel ::ng-deep .mat-expansion-panel-header-title {
-  overflow: hidden;
-  flex-grow: 1;
+  flex: 1 1 auto;
   min-width: 0;
+  margin-right: 8px;
 }
 
 .audit-trail-panel ::ng-deep .mat-expansion-panel-header-description {
-  overflow: hidden;
-  flex-shrink: 0;
-  white-space: nowrap;
-  margin-right: 16px;
-}
-
-.audit-trail-panel ::ng-deep .mat-expansion-panel-body {
-  overflow: hidden;
-  padding-left: 0 !important;
-  padding-right: 0 !important;
-  box-sizing: border-box;
-}
-
-.audit-trail-panel ::ng-deep .mat-expansion-panel-content {
-  overflow: hidden;
+  flex: 0 0 auto;
+  margin: 0 8px 0 0;
 }
 
 .audit-title {
   margin-left: 8px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  font-size: 0.9em;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
+/* Panel Body - Mobile First */
+.audit-trail-panel ::ng-deep .mat-expansion-panel-body {
+  padding: 0;
+}
+
+/* List Container */
 .audit-list {
-  padding-top: 8px;
-  padding-left: 16px !important;
-  padding-right: 16px !important;
-  overflow: hidden;
+  padding: 8px;
   width: 100%;
-  max-width: 100%;
-  box-sizing: border-box;
 }
 
 .audit-list ::ng-deep .mat-mdc-list-item {
-  overflow: hidden;
-  width: 100%;
-  max-width: 100%;
-  box-sizing: border-box;
-  padding-left: 0 !important;
-  padding-right: 0 !important;
+  padding: 0;
+  min-height: auto;
 }
 
-.audit-list ::ng-deep .mat-mdc-list-item-unscoped-content {
-  overflow: hidden;
-  width: 100%;
-  max-width: 100%;
-  box-sizing: border-box;
-}
-
+/* Audit Entry */
 .audit-entry {
-  height: auto !important;
   padding: 12px 0;
-  overflow: hidden;
-  max-width: 100%;
-  width: 100%;
-  box-sizing: border-box;
+  min-height: auto !important;
+  height: auto !important;
 }
 
 .audit-entry-content {
@@ -109,82 +82,68 @@ mat-accordion {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  min-width: 0;
-  box-sizing: border-box;
 }
 
+/* Entry Header - Stack on mobile */
 .audit-entry-header {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 8px;
-  min-width: 0;
-  box-sizing: border-box;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  width: 100%;
 }
 
-.audit-timestamp {
-  font-size: 0.85em;
-  color: rgba(0, 0, 0, 0.6);
-  white-space: nowrap;
+/* Action Chip */
+.audit-action-chip {
   flex-shrink: 0;
 }
 
-.audit-action-chip {
-  max-width: calc(100% - 120px);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  box-sizing: border-box;
+/* Timestamp */
+.audit-timestamp {
+  font-size: 0.8em;
+  color: rgba(0, 0, 0, 0.6);
+  flex-shrink: 0;
 }
 
+/* Description - Mobile First with proper text wrapping */
 .audit-description {
   font-size: 0.9em;
   color: rgba(0, 0, 0, 0.7);
-  line-height: 1.4;
+  line-height: 1.5;
+  width: 100%;
+  
+  /* Aggressive text wrapping for mobile */
   word-wrap: break-word;
   overflow-wrap: anywhere;
   word-break: break-word;
   -webkit-hyphens: auto;
   -ms-hyphens: auto;
   hyphens: auto;
-  max-width: 100%;
-  width: 100%;
-  overflow: hidden;
-  box-sizing: border-box;
 }
 
-/* Responsive adjustments for mobile */
-@media (max-width: 600px) {
+/* Tablet and Desktop - min-width 600px */
+@media (min-width: 600px) {
+  /* Increase padding on larger screens */
   .audit-trail-panel ::ng-deep .mat-expansion-panel-header {
-    padding-left: 8px !important;
-    padding-right: 8px !important;
-  }
-  
-  .audit-entry-header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  
-  .audit-timestamp {
-    font-size: 0.8em;
+    padding: 16px;
   }
   
   .audit-list {
-    padding-left: 8px !important;
-    padding-right: 8px !important;
+    padding: 16px;
   }
   
-  .audit-entry {
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-  }
-  
-  .audit-action-chip {
-    max-width: 100%;
+  /* Horizontal layout for entry header on larger screens */
+  .audit-entry-header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
   }
   
   .audit-title {
-    font-size: 0.9em;
-    white-space: normal;
+    font-size: 1em;
+  }
+  
+  .audit-timestamp {
+    font-size: 0.85em;
   }
 }
