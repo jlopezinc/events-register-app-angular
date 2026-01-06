@@ -52,6 +52,22 @@
       </mat-card-content>
     </mat-card>
 
+    <!-- Reconcile Error Panel -->
+    <mat-card *ngIf="showReconcilePanel && reconcileError" class="reconcile-result-card reconcile-error-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon color="warn">error</mat-icon>
+          Erro na Reconciliação
+        </mat-card-title>
+        <button mat-icon-button (click)="closeReconcilePanel()" class="close-button">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-card-header>
+      <mat-card-content>
+        <p>{{ reconcileError }}</p>
+      </mat-card-content>
+    </mat-card>
+
     <mat-divider *ngIf="showReconcilePanel"></mat-divider>
 
     <!-- Existing content -->

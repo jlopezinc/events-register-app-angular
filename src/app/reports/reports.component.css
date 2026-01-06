@@ -8,6 +8,10 @@
   background-color: #f5f5f5;
 }
 
+.reconcile-error-card {
+  background-color: #ffebee;
+}
+
 .reconcile-result-card mat-card-header {
   display: flex;
   justify-content: space-between;

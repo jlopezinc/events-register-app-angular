@@ -27,6 +27,7 @@ export class ReportsComponent {
   isReconciling: boolean = false;
   reconcileResult: ReconcileCountersResponse | null = null;
   showReconcilePanel: boolean = false;
+  reconcileError: string | null = null;
 
   ngAfterViewInit(): void {
     this.loadCounters();
@@ -76,6 +77,7 @@ export class ReportsComponent {
 
   reconcileCounters(): void {
     this.isReconciling = true;
+    this.reconcileError = null;
     this.eventsRegisterApiService.reconcileCounters('ttamigosnatal2026')
       .subscribe({
         next: (data) => {
@@ -87,6 +89,8 @@ export class ReportsComponent {
         },
         error: (error) => {
           this.isReconciling = false;
+          this.reconcileError = 'Erro ao recalcular contadores. Por favor, tente novamente.';
+          this.showReconcilePanel = true;
           console.error('Error reconciling counters:', error);
         }
       });
@@ -95,5 +99,6 @@ export class ReportsComponent {
   closeReconcilePanel(): void {
     this.showReconcilePanel = false;
     this.reconcileResult = null;
+    this.reconcileError = null;
   }
 }
