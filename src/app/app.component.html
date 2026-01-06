@@ -16,7 +16,7 @@
             *ngIf="isHandset$ | async">
             <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
           </button>
-          <span>TT Amigos Natal 2026</span>
+          <span>TT 2026</span>
           <span class="example-spacer"></span>
           <div class="check-in-toggle-container">
             <mat-icon>how_to_reg</mat-icon>
@@ -24,7 +24,6 @@
               color="accent" 
               [checked]="checkInMode$ | async"
               (change)="onCheckInModeToggle($event)">
-              Modo CheckIn
             </mat-slide-toggle>
           </div>
           <button mat-icon-button (click)="signOut()">
