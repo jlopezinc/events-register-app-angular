@@ -5,9 +5,9 @@
         [mode]="(isHandset$ | async) ? 'over' : 'side'" [opened]="(isHandset$ | async) === false">
         <mat-toolbar>Menu</mat-toolbar>
         <mat-nav-list>
-          <a mat-list-item routerLink="/camera">QR Reader</a>
-          <a mat-list-item routerLink="/search">Procurar</a>
-          <a mat-list-item routerLink="/reports">Relatórios</a>
+          <a mat-list-item routerLink="/camera" (click)="closeSidenavOnMobile()">QR Reader</a>
+          <a mat-list-item routerLink="/search" (click)="closeSidenavOnMobile()">Procurar</a>
+          <a mat-list-item routerLink="/reports" (click)="closeSidenavOnMobile()">Relatórios</a>
         </mat-nav-list>
       </mat-sidenav>
       <mat-sidenav-content>

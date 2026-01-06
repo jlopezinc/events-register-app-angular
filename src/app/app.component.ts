@@ -1,8 +1,9 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ViewChild } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { CheckInModeService } from './shared/check-in-mode.service';
+import { MatSidenav } from '@angular/material/sidenav';
 
 @Component({
     selector: 'app-root',
@@ -14,6 +15,8 @@ export class AppComponent {
   title = 'events-register-app-angular';
   private breakpointObserver = inject(BreakpointObserver);
   private checkInModeService = inject(CheckInModeService);
+
+  @ViewChild('drawer') drawer!: MatSidenav;
 
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
     .pipe(
@@ -32,5 +35,17 @@ export class AppComponent {
    */
   onCheckInModeToggle(event: any): void {
     this.checkInModeService.setCheckInMode(event.checked);
+  }
+
+  /**
+   * Close the sidenav on mobile devices when navigation occurs
+   */
+  closeSidenavOnMobile(): void {
+    // Check if we're on a mobile device before closing
+    this.isHandset$.subscribe(isHandset => {
+      if (isHandset && this.drawer) {
+        this.drawer.close();
+      }
+    }).unsubscribe();
   }
 }
