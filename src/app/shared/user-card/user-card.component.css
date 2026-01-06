@@ -145,12 +145,16 @@ mat-accordion {
   }
   
   .audit-list {
-    padding-left: 0;
-    padding-right: 0;
+    padding-left: 8px !important;
+    padding-right: 8px !important;
   }
   
   .audit-entry {
-    padding-left: 0;
-    padding-right: 0;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+  
+  .audit-action-chip {
+    max-width: 100%;
   }
 }
