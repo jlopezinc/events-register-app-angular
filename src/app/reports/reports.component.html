@@ -8,6 +8,10 @@
     <mat-divider></mat-divider>
     <section class="example-section">
       <mat-list>
+        <mat-list-item class="example-h3">Faltam check in (participantes) : {{counters.participantsNotCheckedIn}}</mat-list-item>
+        <mat-list-item class="example-h3">Total check in (participantes) : {{counters.participantsCheckedIn}}</mat-list-item>
+        <mat-divider></mat-divider>
+
         <mat-list-item>Total carros checked in: {{counters.checkedInCar}} -
           {{checkedInCarPercentage | number}}%</mat-list-item>
         <mat-list-item>Total motas checked in: {{counters.checkedInMotorcycle}} -

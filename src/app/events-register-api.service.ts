@@ -73,6 +73,8 @@ export class Counters {
   checkedInCar: number = 0;
   checkedInMotorcycle: number = 0;
   checkedInQuad: number = 0;
+  participantsCheckedIn: number = 0;
+  participantsNotCheckedIn: number = 0;
 }
 
 @Injectable({
