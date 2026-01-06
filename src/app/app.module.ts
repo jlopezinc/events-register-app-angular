@@ -30,6 +30,8 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatSelectModule } from '@angular/material/select';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatChipsModule } from '@angular/material/chips';
 
 import { RouterModule } from '@angular/router';
 import { QrReaderComponent } from './qr-reader/qr-reader.component';
@@ -72,6 +74,8 @@ Amplify.configure(awsconfig);
         MatSnackBarModule,
         MatSelectModule,
         MatProgressSpinnerModule,
+        MatExpansionModule,
+        MatChipsModule,
         RouterModule.forRoot([
             { path: 'camera', component: QrReaderComponent },
             { path: 'reports', component: ReportsComponent },

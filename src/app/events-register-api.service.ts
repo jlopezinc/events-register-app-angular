@@ -24,6 +24,7 @@ export class Metadata {
   checkIn: CheckIn = new CheckIn();
   paymentInfo: PaymentInfo = new PaymentInfo();
   comment: string | undefined;
+  changeHistory: ChangeHistoryEntry[] = [];
 }
 
 export class Vehicle {
@@ -50,6 +51,12 @@ export class People {
 export class CheckIn {
   checkInAt: Date | undefined;
   byWho: string = "";
+}
+
+export class ChangeHistoryEntry {
+  timestamp: Date | undefined;
+  action: string = "";
+  description: string = "";
 }
 
 export class Counters {

@@ -5,3 +5,161 @@
 .checkin-problem {
   background: red;
 }
+
+/* 
+ * Audit Trail Styles - Mobile First Approach
+ * Optimized for Pixel 7a (412px width)
+ * All content must wrap and be readable - NO overflow hidden
+ */
+
+/* Expansion Panel Container */
+mat-accordion {
+  display: block;
+  width: 100%;
+}
+
+/* Expansion Panel - Mobile First */
+.audit-trail-panel {
+  margin-top: 16px;
+  width: 100%;
+}
+
+/* Header - ensure proper wrapping */
+.audit-trail-panel ::ng-deep .mat-expansion-panel-header {
+  padding: 12px 8px;
+  min-height: 48px;
+  height: auto;
+}
+
+.audit-trail-panel ::ng-deep .mat-expansion-panel-header-title {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin-right: 8px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.audit-trail-panel ::ng-deep .mat-expansion-panel-header-description {
+  flex: 0 0 auto;
+  margin: 0 8px 0 0;
+  white-space: normal;
+}
+
+.audit-title {
+  margin-left: 8px;
+  font-size: 0.9em;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
+}
+
+/* Panel Body - Mobile First */
+.audit-trail-panel ::ng-deep .mat-expansion-panel-body {
+  padding: 0;
+}
+
+/* List Container */
+.audit-list {
+  padding: 8px;
+  width: 100%;
+  max-width: 100%;
+}
+
+.audit-list ::ng-deep .mat-mdc-list-item {
+  padding: 0;
+  min-height: auto;
+  height: auto;
+}
+
+/* Audit Entry */
+.audit-entry {
+  padding: 12px 0;
+  min-height: auto !important;
+  height: auto !important;
+  width: 100%;
+  max-width: 100%;
+}
+
+.audit-entry-content {
+  width: 100%;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Entry Header - Stack on mobile */
+.audit-entry-header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  width: 100%;
+  max-width: 100%;
+}
+
+/* Action Chip - ensure it wraps if needed */
+.audit-action-chip {
+  flex-shrink: 0;
+  max-width: 100%;
+  white-space: normal;
+}
+
+/* Timestamp */
+.audit-timestamp {
+  font-size: 0.8em;
+  color: rgba(0, 0, 0, 0.6);
+  flex-shrink: 0;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* Description - Mobile First with aggressive text wrapping */
+.audit-description {
+  font-size: 0.9em;
+  color: rgba(0, 0, 0, 0.7);
+  line-height: 1.5;
+  width: 100%;
+  max-width: 100%;
+  
+  /* Ensure all text is visible and wraps properly */
+  white-space: normal;
+  word-wrap: break-word;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  -webkit-hyphens: auto;
+  -ms-hyphens: auto;
+  hyphens: auto;
+}
+
+/* Tablet and Desktop - min-width 600px */
+@media (min-width: 600px) {
+  /* Increase padding on larger screens */
+  .audit-trail-panel ::ng-deep .mat-expansion-panel-header {
+    padding: 16px;
+  }
+  
+  .audit-list {
+    padding: 16px;
+  }
+  
+  /* Horizontal layout for entry header on larger screens */
+  .audit-entry-header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  
+  .audit-title {
+    font-size: 1em;
+  }
+  
+  .audit-timestamp {
+    font-size: 0.85em;
+  }
+  
+  .audit-description {
+    font-size: 0.95em;
+  }
+}
