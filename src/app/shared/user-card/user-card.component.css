@@ -32,6 +32,25 @@ mat-accordion {
   box-sizing: border-box;
 }
 
+.audit-trail-panel ::ng-deep .mat-expansion-panel-header {
+  overflow: hidden;
+  padding-left: 16px !important;
+  padding-right: 16px !important;
+}
+
+.audit-trail-panel ::ng-deep .mat-expansion-panel-header-title {
+  overflow: hidden;
+  flex-grow: 1;
+  min-width: 0;
+}
+
+.audit-trail-panel ::ng-deep .mat-expansion-panel-header-description {
+  overflow: hidden;
+  flex-shrink: 0;
+  white-space: nowrap;
+  margin-right: 16px;
+}
+
 .audit-trail-panel ::ng-deep .mat-expansion-panel-body {
   overflow: hidden;
   padding-left: 0 !important;
@@ -47,6 +66,7 @@ mat-accordion {
   margin-left: 8px;
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .audit-list {
@@ -135,6 +155,11 @@ mat-accordion {
 
 /* Responsive adjustments for mobile */
 @media (max-width: 600px) {
+  .audit-trail-panel ::ng-deep .mat-expansion-panel-header {
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+  }
+  
   .audit-entry-header {
     flex-direction: column;
     align-items: flex-start;
@@ -156,5 +181,10 @@ mat-accordion {
   
   .audit-action-chip {
     max-width: 100%;
+  }
+  
+  .audit-title {
+    font-size: 0.9em;
+    white-space: normal;
   }
 }
