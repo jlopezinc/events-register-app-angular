@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Counters, EventsRegisterApiService } from '../events-register-api.service';
+import { Counters, EventsRegisterApiService, ReconcileCountersResponse } from '../events-register-api.service';
 
 @Component({
     selector: 'reports',
@@ -24,7 +24,16 @@ export class ReportsComponent {
   paidMotorcyclePercentage: number = 0;
   paidQuadPercentage: number = 0;
 
+  isReconciling: boolean = false;
+  reconcileResult: ReconcileCountersResponse | null = null;
+  showReconcilePanel: boolean = false;
+  reconcileError: string | null = null;
+
   ngAfterViewInit(): void {
+    this.loadCounters();
+  }
+
+  loadCounters(): void {
     this.eventsRegisterApiService.getCounters('ttamigosnatal2026')
       .subscribe({
         next: (data) => {
@@ -64,5 +73,32 @@ export class ReportsComponent {
           }
         }
       })
+  }
+
+  reconcileCounters(): void {
+    this.isReconciling = true;
+    this.reconcileError = null;
+    this.eventsRegisterApiService.reconcileCounters('ttamigosnatal2026')
+      .subscribe({
+        next: (data) => {
+          this.reconcileResult = data;
+          this.showReconcilePanel = true;
+          this.isReconciling = false;
+          // Refresh counters
+          this.loadCounters();
+        },
+        error: (error) => {
+          this.isReconciling = false;
+          this.reconcileError = 'Erro ao recalcular contadores. Por favor, tente novamente.';
+          this.showReconcilePanel = true;
+          console.error('Error reconciling counters:', error);
+        }
+      });
+  }
+
+  closeReconcilePanel(): void {
+    this.showReconcilePanel = false;
+    this.reconcileResult = null;
+    this.reconcileError = null;
   }
 }

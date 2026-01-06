@@ -1,0 +1,45 @@
+.reconcile-section {
+  margin-bottom: 20px;
+  text-align: right;
+}
+
+.reconcile-result-card {
+  margin-bottom: 20px;
+  background-color: #f5f5f5;
+}
+
+.reconcile-error-card {
+  background-color: #ffebee;
+}
+
+.reconcile-result-card mat-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.reconcile-result-card mat-card-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.close-button {
+  margin-left: auto;
+}
+
+.comparison-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-top: 10px;
+}
+
+.comparison-column h4 {
+  margin-bottom: 10px;
+  color: #3f51b5;
+}
+
+.comparison-column p {
+  margin: 5px 0;
+}
