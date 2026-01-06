@@ -77,6 +77,14 @@ export class Counters {
   participantsNotCheckedIn: number = 0;
 }
 
+export interface ReconcileCountersResponse {
+  eventId: string;
+  status: string;
+  before: Counters;
+  after: Counters;
+  message: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -116,6 +124,11 @@ export class EventsRegisterApiService {
 
   updateUser(email: string, eventName: string, userData: UserModel) {
     return this.http.put<UserModel>(this.api + '/v2/' + eventName + '/' + email, userData)
+      .pipe(catchError(this.handleError));
+  }
+
+  reconcileCounters(eventName: string) {
+    return this.http.post<ReconcileCountersResponse>(this.api + '/v1/reconcile-counters/' + eventName, null)
       .pipe(catchError(this.handleError));
   }
 

@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { EventsRegisterApiService, UserModel } from './events-register-api.service';
+import { EventsRegisterApiService, UserModel, Counters, ReconcileCountersResponse } from './events-register-api.service';
 
 describe('EventsRegisterApiService', () => {
   let service: EventsRegisterApiService;
@@ -58,5 +58,39 @@ describe('EventsRegisterApiService', () => {
 
     const req = httpMock.expectOne(expectedUrl);
     req.flush('Error', { status: 500, statusText: 'Server Error' });
+  });
+
+  it('should reconcile counters via POST request', () => {
+    const eventName = 'testEvent';
+    const mockBefore = new Counters();
+    mockBefore.total = 10;
+    mockBefore.participantsCheckedIn = 5;
+    mockBefore.participantsNotCheckedIn = 5;
+    
+    const mockAfter = new Counters();
+    mockAfter.total = 10;
+    mockAfter.participantsCheckedIn = 6;
+    mockAfter.participantsNotCheckedIn = 4;
+    
+    const mockResponse: ReconcileCountersResponse = {
+      eventId: 'test-event-id',
+      status: 'success',
+      before: mockBefore,
+      after: mockAfter,
+      message: 'Counters reconciled successfully'
+    };
+    
+    const expectedUrl = 'https://3692kus1h1.execute-api.eu-north-1.amazonaws.com/v1/reconcile-counters/testEvent';
+    
+    service.reconcileCounters(eventName).subscribe(response => {
+      expect(response).toEqual(mockResponse);
+      expect(response.status).toBe('success');
+      expect(response.after.participantsCheckedIn).toBe(6);
+    });
+
+    const req = httpMock.expectOne(expectedUrl);
+    expect(req.request.method).toBe('POST');
+    expect(req.request.body).toBeNull();
+    req.flush(mockResponse);
   });
 });

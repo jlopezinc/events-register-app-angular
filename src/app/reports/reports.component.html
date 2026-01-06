@@ -1,5 +1,60 @@
 <mat-card class="example-card">
   <mat-card-content>
+    <!-- Reconcile Button -->
+    <section class="reconcile-section">
+      <button mat-raised-button color="primary" 
+              (click)="reconcileCounters()" 
+              [disabled]="isReconciling">
+        <mat-icon *ngIf="!isReconciling">sync</mat-icon>
+        <mat-spinner *ngIf="isReconciling" diameter="20"></mat-spinner>
+        {{ isReconciling ? 'Recalculando...' : 'Recalcular Contadores' }}
+      </button>
+    </section>
+
+    <!-- Reconcile Result Panel -->
+    <mat-card *ngIf="showReconcilePanel && reconcileResult" class="reconcile-result-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon [color]="reconcileResult.status === 'success' ? 'primary' : 'warn'">
+            {{ reconcileResult.status === 'success' ? 'check_circle' : 'error' }}
+          </mat-icon>
+          Resultado da Reconciliação
+        </mat-card-title>
+        <button mat-icon-button (click)="closeReconcilePanel()" class="close-button">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-card-header>
+      <mat-card-content>
+        <p><strong>Status:</strong> {{ reconcileResult.status }}</p>
+        <p><strong>Mensagem:</strong> {{ reconcileResult.message }}</p>
+        
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>Ver Detalhes (Antes vs Depois)</mat-panel-title>
+          </mat-expansion-panel-header>
+          
+          <div class="comparison-grid">
+            <div class="comparison-column">
+              <h4>Antes</h4>
+              <p>Total: {{ reconcileResult.before.total }}</p>
+              <p>Participantes Check In: {{ reconcileResult.before.participantsCheckedIn }}</p>
+              <p>Participantes Não Check In: {{ reconcileResult.before.participantsNotCheckedIn }}</p>
+            </div>
+            
+            <div class="comparison-column">
+              <h4>Depois</h4>
+              <p>Total: {{ reconcileResult.after.total }}</p>
+              <p>Participantes Check In: {{ reconcileResult.after.participantsCheckedIn }}</p>
+              <p>Participantes Não Check In: {{ reconcileResult.after.participantsNotCheckedIn }}</p>
+            </div>
+          </div>
+        </mat-expansion-panel>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-divider *ngIf="showReconcilePanel"></mat-divider>
+
+    <!-- Existing content -->
     <h3 class="example-h3">Progresso check in - {{checkedInPercentage | number}}%</h3>
 
     <section class="example-section">
