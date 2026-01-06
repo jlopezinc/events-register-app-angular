@@ -53,7 +53,7 @@
         <mat-list-item *ngFor="let entry of user.metadata.changeHistory; let last = last" class="audit-entry">
           <div class="audit-entry-content">
             <div class="audit-entry-header">
-              <mat-chip [color]="getActionColor(entry.action)" highlighted>
+              <mat-chip class="audit-action-chip" [color]="getActionColor(entry.action)" highlighted>
                 {{getActionLabel(entry.action)}}
               </mat-chip>
               <span class="audit-timestamp">{{entry.timestamp | date:'short'}}</span>
