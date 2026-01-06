@@ -6,12 +6,20 @@
       <mat-progress-bar class="example-margin" color="accent" [value]="checkedInPercentage"></mat-progress-bar>
     </section>
     <mat-divider></mat-divider>
+    <table>
+      <tr>
+        <td><h5>Participantes</h5></td>
+        <td>
+          <mat-list>
+           <mat-list-item>Checked in: {{counters.participantsCheckedIn}}</mat-list-item>
+           <mat-list-item>Faltam: {{counters.participantsNotCheckedIn}}</mat-list-item>     
+          </mat-list>
+        </td>
+      </tr>
+      </table>
+   
     <section class="example-section">
       <mat-list>
-        <mat-list-item class="example-h3">Faltam check in (participantes) : {{counters.participantsNotCheckedIn}}</mat-list-item>
-        <mat-list-item class="example-h3">Total check in (participantes) : {{counters.participantsCheckedIn}}</mat-list-item>
-        <mat-divider></mat-divider>
-
         <mat-list-item>Total carros checked in: {{counters.checkedInCar}} -
           {{checkedInCarPercentage | number}}%</mat-list-item>
         <mat-list-item>Total motas checked in: {{counters.checkedInMotorcycle}} -
