@@ -23,6 +23,8 @@ export class UserEditFormComponent implements OnInit, OnDestroy {
   guestTypes = ['driver', 'guest'];
   private subscriptions: Subscription[] = [];
   private visualViewportHandler?: () => void;
+  private readonly MOBILE_BREAKPOINT = 767;
+  private readonly KEYBOARD_DISMISS_DELAY_MS = 100;
 
   constructor(
     private fb: FormBuilder,
@@ -189,7 +191,7 @@ export class UserEditFormComponent implements OnInit, OnDestroy {
 
   private setupMobileKeyboardHandling(): void {
     // Only apply on mobile devices
-    if (typeof window !== 'undefined' && window.visualViewport && window.innerWidth <= 767) {
+    if (typeof window !== 'undefined' && window.visualViewport && window.innerWidth <= this.MOBILE_BREAKPOINT) {
       this.visualViewportHandler = () => {
         const dialogContent = document.querySelector('mat-dialog-content');
         if (dialogContent && window.visualViewport) {
@@ -216,7 +218,7 @@ export class UserEditFormComponent implements OnInit, OnDestroy {
       if (actions) {
         actions.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       }
-    }, 100);
+    }, this.KEYBOARD_DISMISS_DELAY_MS);
   }
 
   get hasComment(): boolean {
