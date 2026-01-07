@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, OnDestroy, HostListener } from '@angular/core';
+import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -205,12 +205,17 @@ export class UserEditFormComponent implements OnInit, OnDestroy {
 
   dismissKeyboardAndScroll(): void {
     // Blur active element to dismiss keyboard
-    (document.activeElement as HTMLElement)?.blur();
+    const activeElement = document.activeElement;
+    if (activeElement && activeElement instanceof HTMLElement) {
+      activeElement.blur();
+    }
     
     // Small delay to allow keyboard to close, then scroll to actions
     setTimeout(() => {
       const actions = document.querySelector('mat-dialog-actions');
-      actions?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      if (actions) {
+        actions.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
     }, 100);
   }
 
