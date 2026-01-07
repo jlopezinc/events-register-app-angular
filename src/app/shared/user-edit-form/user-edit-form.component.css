@@ -65,5 +65,31 @@ mat-dialog-actions {
 @media (max-width: 767px) {
   .edit-form {
     min-width: 300px;
+    padding-bottom: 8px;
+  }
+
+  mat-dialog-content {
+    max-height: 60vh; /* Reduced from 70vh for mobile */
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+  }
+
+  mat-dialog-actions {
+    position: sticky;
+    bottom: 0;
+    background: white;
+    z-index: 10;
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+    padding: 12px 16px;
+    margin: 0;
+  }
+}
+
+/* Add visual viewport support for devices with virtual keyboards */
+@supports (height: 100dvh) {
+  @media (max-width: 767px) {
+    mat-dialog-content {
+      max-height: 50dvh; /* Dynamic viewport height */
+    }
   }
 }

@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
+import { Component, Inject, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -22,6 +22,7 @@ export class UserEditFormComponent implements OnInit, OnDestroy {
   vehicleTypes = ['car', 'motorcycle', 'quad'];
   guestTypes = ['driver', 'guest'];
   private subscriptions: Subscription[] = [];
+  private visualViewportHandler?: () => void;
 
   constructor(
     private fb: FormBuilder,
@@ -33,10 +34,16 @@ export class UserEditFormComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.initializeForm();
+    this.setupMobileKeyboardHandling();
   }
 
   ngOnDestroy(): void {
     this.subscriptions.forEach(sub => sub.unsubscribe());
+    
+    // Cleanup viewport listener
+    if (this.visualViewportHandler && window.visualViewport) {
+      window.visualViewport.removeEventListener('resize', this.visualViewportHandler);
+    }
   }
 
   private initializeForm(): void {
@@ -178,6 +185,33 @@ export class UserEditFormComponent implements OnInit, OnDestroy {
     });
 
     this.subscriptions.push(sub);
+  }
+
+  private setupMobileKeyboardHandling(): void {
+    // Only apply on mobile devices
+    if (typeof window !== 'undefined' && window.visualViewport && window.innerWidth <= 767) {
+      this.visualViewportHandler = () => {
+        const dialogContent = document.querySelector('mat-dialog-content');
+        if (dialogContent && window.visualViewport) {
+          // Adjust height when keyboard appears
+          const viewportHeight = window.visualViewport.height;
+          (dialogContent as HTMLElement).style.maxHeight = `${viewportHeight * 0.6}px`;
+        }
+      };
+      
+      window.visualViewport.addEventListener('resize', this.visualViewportHandler);
+    }
+  }
+
+  dismissKeyboardAndScroll(): void {
+    // Blur active element to dismiss keyboard
+    (document.activeElement as HTMLElement)?.blur();
+    
+    // Small delay to allow keyboard to close, then scroll to actions
+    setTimeout(() => {
+      const actions = document.querySelector('mat-dialog-actions');
+      actions?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 100);
   }
 
   get hasComment(): boolean {
