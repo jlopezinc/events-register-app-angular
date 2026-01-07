@@ -22,6 +22,9 @@ export class UserEditFormComponent implements OnInit, OnDestroy {
   vehicleTypes = ['car', 'motorcycle', 'quad'];
   guestTypes = ['driver', 'guest'];
   private subscriptions: Subscription[] = [];
+  private visualViewportHandler?: () => void;
+  private readonly MOBILE_BREAKPOINT = 767;
+  private readonly KEYBOARD_DISMISS_DELAY_MS = 100;
 
   constructor(
     private fb: FormBuilder,
@@ -33,10 +36,16 @@ export class UserEditFormComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.initializeForm();
+    this.setupMobileKeyboardHandling();
   }
 
   ngOnDestroy(): void {
     this.subscriptions.forEach(sub => sub.unsubscribe());
+    
+    // Cleanup viewport listener
+    if (this.visualViewportHandler && window.visualViewport) {
+      window.visualViewport.removeEventListener('resize', this.visualViewportHandler);
+    }
   }
 
   private initializeForm(): void {
@@ -178,6 +187,38 @@ export class UserEditFormComponent implements OnInit, OnDestroy {
     });
 
     this.subscriptions.push(sub);
+  }
+
+  private setupMobileKeyboardHandling(): void {
+    // Only apply on mobile devices
+    if (typeof window !== 'undefined' && window.visualViewport && window.innerWidth <= this.MOBILE_BREAKPOINT) {
+      this.visualViewportHandler = () => {
+        const dialogContent = document.querySelector('mat-dialog-content');
+        if (dialogContent && window.visualViewport) {
+          // Adjust height when keyboard appears
+          const viewportHeight = window.visualViewport.height;
+          (dialogContent as HTMLElement).style.maxHeight = `${viewportHeight * 0.6}px`;
+        }
+      };
+      
+      window.visualViewport.addEventListener('resize', this.visualViewportHandler);
+    }
+  }
+
+  dismissKeyboardAndScroll(): void {
+    // Blur active element to dismiss keyboard
+    const activeElement = document.activeElement;
+    if (activeElement && activeElement instanceof HTMLElement) {
+      activeElement.blur();
+    }
+    
+    // Small delay to allow keyboard to close, then scroll to actions
+    setTimeout(() => {
+      const actions = document.querySelector('mat-dialog-actions');
+      if (actions) {
+        actions.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }, this.KEYBOARD_DISMISS_DELAY_MS);
   }
 
   get hasComment(): boolean {

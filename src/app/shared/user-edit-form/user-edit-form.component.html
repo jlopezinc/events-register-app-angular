@@ -21,7 +21,7 @@
 
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Telefone</mat-label>
-        <input matInput type="tel" formControlName="driverPhone" placeholder="+351912345678">
+        <input matInput type="tel" formControlName="driverPhone" placeholder="+351912345678" enterkeyhint="next">
         <mat-hint>Formato: +351912345678</mat-hint>
       </mat-form-field>
     </section>
@@ -89,7 +89,7 @@
 
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>Telefone</mat-label>
-            <input matInput type="tel" formControlName="phoneNumber" placeholder="+351912345678">
+            <input matInput type="tel" formControlName="phoneNumber" placeholder="+351912345678" enterkeyhint="done" (keyup.enter)="dismissKeyboardAndScroll()">
           </mat-form-field>
 
           <button mat-icon-button color="warn" type="button" (click)="removeGuest(i)" *ngIf="guestsArray.length > 1">
@@ -121,7 +121,7 @@
 
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Comentário</mat-label>
-        <textarea matInput formControlName="comment" rows="3" placeholder="Comentários do administrador"></textarea>
+        <textarea matInput formControlName="comment" rows="3" placeholder="Comentários do administrador" enterkeyhint="done"></textarea>
         <mat-icon matPrefix *ngIf="hasComment" color="warn">warning</mat-icon>
         <mat-hint *ngIf="hasComment">Este utilizador tem um comentário de atenção</mat-hint>
       </mat-form-field>
