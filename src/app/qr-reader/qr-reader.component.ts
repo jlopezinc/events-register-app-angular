@@ -9,6 +9,7 @@ import { Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { UserEditFormComponent } from '../shared/user-edit-form/user-edit-form.component';
+import { AudioService } from '../shared/audio.service';
 
 const EVENT_NAME = 'ttamigosnatal2026';
 
@@ -29,7 +30,8 @@ export class QrReaderComponent implements OnInit, OnDestroy {
     private eventsRegisterApiService: EventsRegisterApiService,
     private checkInModeService: CheckInModeService,
     private dialog: MatDialog,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private audioService: AudioService
   ) {
 
   }
@@ -89,6 +91,13 @@ export class QrReaderComponent implements OnInit, OnDestroy {
     if (this.currentQrCodeValue !== result) {
       this.currentQrCodeValue = result;
       console.log('QR Code scanned:', result);
+      
+      // Play success sound - don't block on audio playback
+      this.audioService.playSuccessBeep().catch(error => {
+        // Silently handle audio errors (e.g., autoplay restrictions)
+        console.debug('Audio playback blocked or failed:', error);
+      });
+      
       if (this.liveMode) {
         this.checkInUser(this.currentQrCodeValue, false);
       } else {
