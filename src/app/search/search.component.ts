@@ -6,7 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { UserEditFormComponent } from '../shared/user-edit-form/user-edit-form.component';
 
-const EVENT_NAME = 'ttamigosnatal2026';
+const EVENT_NAME = 'motorizadas2026';
 
 @Component({
     selector: 'app-search',
