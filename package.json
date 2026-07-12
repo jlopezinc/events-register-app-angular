@@ -5,6 +5,8 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "build:motorizadas2026": "ng build --configuration motorizadas2026",
+    "build:ttamigosnatal2026": "ng build --configuration ttamigosnatal2026",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },

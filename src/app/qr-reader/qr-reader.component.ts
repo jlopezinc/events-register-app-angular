@@ -10,8 +10,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { UserEditFormComponent } from '../shared/user-edit-form/user-edit-form.component';
 import { AudioService } from '../shared/audio.service';
-
-const EVENT_NAME = 'ttamigosnatal2026';
+import { EVENT_NAME } from '../shared/event-name';
 
 @Component({
     selector: 'app-qr-reader',
