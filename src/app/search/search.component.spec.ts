@@ -13,6 +13,7 @@ import { of } from 'rxjs';
 
 import { SearchComponent } from './search.component';
 import { EventsRegisterApiService, UserModel } from '../events-register-api.service';
+import { EVENT_NAME } from '../shared/event-name';
 
 describe('SearchComponent', () => {
   let component: SearchComponent;
@@ -70,7 +71,7 @@ describe('SearchComponent', () => {
     component.phoneNumber = '123 456 7890';
     component.searchUser();
 
-    expect(apiService.getUserByPhone).toHaveBeenCalledWith('1234567890', 'ttamigosnatal2026');
+    expect(apiService.getUserByPhone).toHaveBeenCalledWith('1234567890', EVENT_NAME);
   });
 
   it('should remove leading spaces from phone number before API call', () => {
@@ -81,7 +82,7 @@ describe('SearchComponent', () => {
     component.phoneNumber = '  1234567890';
     component.searchUser();
 
-    expect(apiService.getUserByPhone).toHaveBeenCalledWith('1234567890', 'ttamigosnatal2026');
+    expect(apiService.getUserByPhone).toHaveBeenCalledWith('1234567890', EVENT_NAME);
   });
 
   it('should remove trailing spaces from phone number before API call', () => {
@@ -92,7 +93,7 @@ describe('SearchComponent', () => {
     component.phoneNumber = '1234567890  ';
     component.searchUser();
 
-    expect(apiService.getUserByPhone).toHaveBeenCalledWith('1234567890', 'ttamigosnatal2026');
+    expect(apiService.getUserByPhone).toHaveBeenCalledWith('1234567890', EVENT_NAME);
   });
 
   it('should remove all types of spaces (leading, trailing, intermediate) from phone number', () => {
@@ -103,7 +104,7 @@ describe('SearchComponent', () => {
     component.phoneNumber = '  123 456 7890  ';
     component.searchUser();
 
-    expect(apiService.getUserByPhone).toHaveBeenCalledWith('1234567890', 'ttamigosnatal2026');
+    expect(apiService.getUserByPhone).toHaveBeenCalledWith('1234567890', EVENT_NAME);
   });
 
   it('should handle phone number with special characters and spaces', () => {
@@ -114,7 +115,7 @@ describe('SearchComponent', () => {
     component.phoneNumber = '+351 912 345 678';
     component.searchUser();
 
-    expect(apiService.getUserByPhone).toHaveBeenCalledWith('+351912345678', 'ttamigosnatal2026');
+    expect(apiService.getUserByPhone).toHaveBeenCalledWith('+351912345678', EVENT_NAME);
   });
 
   it('should not call API when phone number contains only spaces', () => {

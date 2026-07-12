@@ -33,6 +33,15 @@ Run `ng generate component component-name` to generate a new component. You can 
 
 Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
 
+### Event build configuration
+
+The event name is centralized in `src/environments/environment.ts` and defaults to `motorizadas2026`.
+
+You can build with a specific event configuration:
+
+- `npm run build:motorizadas2026`
+- `npm run build:ttamigosnatal2026`
+
 ## Running unit tests
 
 Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).

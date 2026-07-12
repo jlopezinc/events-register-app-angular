@@ -5,8 +5,7 @@ import { Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { UserEditFormComponent } from '../shared/user-edit-form/user-edit-form.component';
-
-const EVENT_NAME = 'motorizadas2026';
+import { EVENT_NAME } from '../shared/event-name';
 
 @Component({
     selector: 'app-search',

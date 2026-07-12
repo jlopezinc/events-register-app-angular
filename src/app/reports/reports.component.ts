@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Counters, EventsRegisterApiService, ReconcileCountersResponse } from '../events-register-api.service';
+import { EVENT_NAME } from '../shared/event-name';
 
 @Component({
     selector: 'reports',
@@ -34,7 +35,7 @@ export class ReportsComponent {
   }
 
   loadCounters(): void {
-    this.eventsRegisterApiService.getCounters('ttamigosnatal2026')
+    this.eventsRegisterApiService.getCounters(EVENT_NAME)
       .subscribe({
         next: (data) => {
           this.counters = { ...data };
@@ -78,7 +79,7 @@ export class ReportsComponent {
   reconcileCounters(): void {
     this.isReconciling = true;
     this.reconcileError = null;
-    this.eventsRegisterApiService.reconcileCounters('ttamigosnatal2026')
+    this.eventsRegisterApiService.reconcileCounters(EVENT_NAME)
       .subscribe({
         next: (data) => {
           this.reconcileResult = data;
